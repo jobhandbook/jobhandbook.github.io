@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>글 관리 | 서재민 (Joey Seo)</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">서재민 <span>Joey Seo</span></a>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="insights.html">인사이트 보기</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="wrap">
+    <div class="kicker">Admin</div>
+    <h1>글 관리</h1>
+    <p>이 페이지는 GitHub 저장소(jobhandbook/jobhandbook.github.io)에 직접 커밋합니다. 본인만 사용하는 개인 토큰이 필요합니다.</p>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap admin-shell">
+
+    <div id="tokenBox">
+      <div class="admin-field">
+        <label>GitHub Personal Access Token</label>
+        <input type="password" id="tokenInput" placeholder="github_pat_..." autocomplete="off" />
+        <div class="hint">
+          Fine-grained token, 이 저장소(jobhandbook.github.io)에만 Contents: Read and write 권한을 준 토큰을 붙여넣으세요.
+          이 브라우저에만 저장되고 어디로도 전송되지 않습니다 (GitHub API 호출에만 사용).
+        </div>
+      </div>
+      <label style="display:flex; align-items:center; gap:8px; font-size:13.5px; color:var(--text-dim); margin-bottom:16px;">
+        <input type="checkbox" id="rememberToken" checked /> 이 브라우저에 저장 (localStorage)
+      </label>
+      <button class="btn btn-primary" id="saveTokenBtn">토큰 저장하고 시작</button>
+    </div>
+
+    <div id="adminBody" style="display:none;">
+      <div class="admin-status" id="status"></div>
+
+      <div class="section-head">
+        <div class="kicker" id="formMode">New Post</div>
+        <h2 id="formTitle">새 글 작성</h2>
+      </div>
+
+      <div class="admin-field">
+        <label>제목</label>
+        <input type="text" id="fTitle" placeholder="예: 요즘 채용 시장에서 느끼는 것" />
+      </div>
+      <div class="admin-field">
+        <label>날짜</label>
+        <input type="text" id="fDate" placeholder="2026.07.04" />
+      </div>
+      <div class="admin-field">
+        <label>태그 (쉼표로 구분)</label>
+        <input type="text" id="fTags" placeholder="채용트렌드, AI채용" />
+      </div>
+      <div class="admin-field">
+        <label>요약 (한 줄, 목록에 노출됨)</label>
+        <input type="text" id="fExcerpt" placeholder="한 줄 요약" />
+      </div>
+      <div class="admin-field">
+        <label>본문 (문단 사이는 빈 줄로 구분)</label>
+        <textarea id="fBody" placeholder="오늘 있었던 일이나 생각을 편하게 적어주세요."></textarea>
+      </div>
+
+      <div style="display:flex; gap:12px; margin-bottom:48px;">
+        <button class="btn btn-primary" id="publishBtn">발행하기</button>
+        <button class="btn btn-ghost" id="cancelEditBtn" style="display:none;">새 글 작성으로 전환</button>
+      </div>
+
+      <div class="section-head">
+        <div class="kicker">Manage</div>
+        <h2>전체 글 (<span id="postCount">0</span>)</h2>
+      </div>
+      <div id="postList"></div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+(function () {
+  const OWNER = "jobhandbook";
+  const REPO = "jobhandbook.github.io";
+  const BRANCH = "master";
+  const PATH = "posts/index.json";
+  const API = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`;
+
+  let token = localStorage.getItem("gh_pat") || "";
+  let posts = [];
+  let currentSha = null;
+  let editingSlug = null;
+
+  function b64EncodeUnicode(str) {
+    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (m, p1) => String.fromCharCode("0x" + p1)));
+  }
+  function b64DecodeUnicode(str) {
+    return decodeURIComponent(
+      atob(str)
+        .split("")
+        .map((c) => "%" + c.charCodeAt(0).toString(16).padStart(2, "0"))
+        .join("")
+    );
+  }
+
+  function showStatus(msg, ok) {
+    const el = document.getElementById("status");
+    el.textContent = msg;
+    el.className = "admin-status show " + (ok ? "ok" : "err");
+  }
+
+  function slugify(title, date) {
+    const base = date.replace(/\./g, "-");
+    const clean = title
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w가-힣\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .slice(0, 40);
+    return `${base}-${clean || "post"}`;
+  }
+
+  function apiHeaders() {
+    return {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/vnd.github+json",
+    };
+  }
+
+  function loadPosts() {
+    return fetch(`${API}?ref=${BRANCH}`, { headers: apiHeaders() })
+      .then((r) => {
+        if (!r.ok) throw new Error(`목록 불러오기 실패 (${r.status})`);
+        return r.json();
+      })
+      .then((data) => {
+        currentSha = data.sha;
+        posts = JSON.parse(b64DecodeUnicode(data.content));
+        renderList();
+      });
+  }
+
+  function renderList() {
+    document.getElementById("postCount").textContent = posts.length;
+    const sorted = posts.slice().sort((a, b) => (a.date < b.date ? 1 : -1));
+    document.getElementById("postList").innerHTML = sorted
+      .map(
+        (p) => `
+      <div class="admin-post-row">
+        <div class="info">
+          <div class="t">${p.title}</div>
+          <div class="d">${p.date} · ${(p.tags || []).join(", ")}</div>
+        </div>
+        <div class="actions">
+          <button class="btn-sm" data-edit="${p.slug}">수정</button>
+          <button class="btn-sm danger" data-delete="${p.slug}">삭제</button>
+        </div>
+      </div>`
+      )
+      .join("");
+
+    document.querySelectorAll("[data-edit]").forEach((btn) => {
+      btn.addEventListener("click", () => loadIntoForm(btn.dataset.edit));
+    });
+    document.querySelectorAll("[data-delete]").forEach((btn) => {
+      btn.addEventListener("click", () => deletePost(btn.dataset.delete));
+    });
+  }
+
+  function loadIntoForm(slug) {
+    const p = posts.find((x) => x.slug === slug);
+    if (!p) return;
+    editingSlug = slug;
+    document.getElementById("fTitle").value = p.title;
+    document.getElementById("fDate").value = p.date;
+    document.getElementById("fTags").value = (p.tags || []).join(", ");
+    document.getElementById("fExcerpt").value = p.excerpt;
+    document.getElementById("fBody").value = p.body;
+    document.getElementById("formTitle").textContent = "글 수정: " + p.title;
+    document.getElementById("formMode").textContent = "Edit Post";
+    document.getElementById("cancelEditBtn").style.display = "inline-flex";
+    document.getElementById("publishBtn").textContent = "수정 저장";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function resetForm() {
+    editingSlug = null;
+    ["fTitle", "fTags", "fExcerpt", "fBody"].forEach((id) => (document.getElementById(id).value = ""));
+    document.getElementById("fDate").value = new Date().toISOString().slice(0, 10).replace(/-/g, ".");
+    document.getElementById("formTitle").textContent = "새 글 작성";
+    document.getElementById("formMode").textContent = "New Post";
+    document.getElementById("cancelEditBtn").style.display = "none";
+    document.getElementById("publishBtn").textContent = "발행하기";
+  }
+
+  function commit(newPosts, message) {
+    const body = {
+      message,
+      content: b64EncodeUnicode(JSON.stringify(newPosts, null, 2)),
+      sha: currentSha,
+      branch: BRANCH,
+    };
+    return fetch(API, {
+      method: "PUT",
+      headers: { ...apiHeaders(), "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    }).then((r) => {
+      if (!r.ok) return r.json().then((e) => Promise.reject(new Error(e.message || `저장 실패 (${r.status})`)));
+      return r.json();
+    });
+  }
+
+  function publish() {
+    const title = document.getElementById("fTitle").value.trim();
+    const date = document.getElementById("fDate").value.trim();
+    const tags = document.getElementById("fTags").value.split(",").map((t) => t.trim()).filter(Boolean);
+    const excerpt = document.getElementById("fExcerpt").value.trim();
+    const body = document.getElementById("fBody").value.trim();
+
+    if (!title || !date || !body) {
+      showStatus("제목, 날짜, 본문은 필수입니다.", false);
+      return;
+    }
+
+    let newPosts;
+    let message;
+    if (editingSlug) {
+      newPosts = posts.map((p) =>
+        p.slug === editingSlug ? { ...p, title, date, tags, excerpt, body } : p
+      );
+      message = `수정: ${title}`;
+    } else {
+      const slug = slugify(title, date);
+      newPosts = [...posts, { slug, title, date, tags, excerpt, body }];
+      message = `새 글: ${title}`;
+    }
+
+    showStatus("저장 중...", true);
+    commit(newPosts, message)
+      .then((res) => {
+        currentSha = res.content.sha;
+        posts = newPosts;
+        renderList();
+        resetForm();
+        showStatus("발행 완료! 1분 내로 사이트에 반영됩니다.", true);
+      })
+      .catch((err) => showStatus(err.message, false));
+  }
+
+  function deletePost(slug) {
+    const p = posts.find((x) => x.slug === slug);
+    if (!p || !confirm(`"${p.title}" 글을 삭제할까요?`)) return;
+    const newPosts = posts.filter((x) => x.slug !== slug);
+    showStatus("삭제 중...", true);
+    commit(newPosts, `삭제: ${p.title}`)
+      .then((res) => {
+        currentSha = res.content.sha;
+        posts = newPosts;
+        renderList();
+        showStatus("삭제 완료.", true);
+      })
+      .catch((err) => showStatus(err.message, false));
+  }
+
+  function start() {
+    document.getElementById("tokenBox").style.display = "none";
+    document.getElementById("adminBody").style.display = "block";
+    resetForm();
+    showStatus("불러오는 중...", true);
+    loadPosts()
+      .then(() => showStatus("불러오기 완료.", true))
+      .catch((err) => showStatus(err.message, false));
+  }
+
+  document.getElementById("saveTokenBtn").addEventListener("click", () => {
+    const val = document.getElementById("tokenInput").value.trim();
+    if (!val) return;
+    token = val;
+    if (document.getElementById("rememberToken").checked) {
+      localStorage.setItem("gh_pat", val);
+    }
+    start();
+  });
+
+  document.getElementById("publishBtn").addEventListener("click", publish);
+  document.getElementById("cancelEditBtn").addEventListener("click", resetForm);
+
+  if (token) {
+    start();
+  }
+})();
+</script>
+</body>
+</html>

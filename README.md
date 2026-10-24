@@ -6,7 +6,7 @@
 ## 배포 (2026-10-24)
 
 - **공개 주소: https://jobhandbook.github.io** — GitHub 저장소 `jobhandbook/jobhandbook.github.io`, 브랜치 `main`에서 GitHub Pages로 서비스
-- 2026년 7월에 올렸던 이전 개인 사이트는 `master` 브랜치(로컬 `old-site`)에 그대로 남아 있어 언제든 복구 가능
+- 2026년 7월에 올렸던 이전 개인 사이트는 `master` 브랜치(로컬 `old-site`)에 남아 있음. 그 사이트의 서비스 5종·수상/자격 나열은 "강사 느낌 없이 묵직하게"라는 방향에 맞지 않아 새 사이트에 옮기지 않음(개인정보처리방침만 다시 써서 가져옴)
 - 수정 후 반영 방법: 파일 고치고 아래 두 줄 (1~2분 뒤 사이트에 반영)
   ```bash
   git add -A; git commit -m "수정 내용"

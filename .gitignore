@@ -1,0 +1,11 @@
+﻿# 로컬 미리보기 서버 설정 (배포 불필요)
+.claude/
+# OS
+Thumbs.db
+desktop.ini
+.DS_Store
+# 사내 자료 (혹시 다시 들어오면 제외)
+*.pdf
+*.pptx
+*.docx
+*.xlsx

@@ -24,7 +24,7 @@
 
 상태 (2026-10-24):
 1. **Google Search Console** ✅ 완료 — joey.seo7@gmail.com 소유, HTML 파일(`google131d8bf31ff5e109.html`, 지우면 안 됨)로 확인, `sitemap.xml` 제출. 제출 직후 상태는 "가져올 수 없음"으로 보이는 게 정상이며 하루 이틀 안에 "성공"으로 바뀜. 대시보드: https://search.google.com/search-console?resource_id=https://jobhandbook.github.io/
-2. **네이버 서치어드바이저** ⬜ 직접 등록 필요 — https://searchadvisor.naver.com → 웹마스터 도구 → 사이트 등록 `https://jobhandbook.github.io` → 소유 확인 'HTML 태그' 선택 → 나온 `<meta name="naver-site-verification" …>` 한 줄을 `index.html`의 `<head>`에 넣고 배포 → 소유확인 클릭 → 요청 → 사이트맵 제출 `https://jobhandbook.github.io/sitemap.xml` → 요청 → 웹 페이지 수집에서 메인 · qna · apply · coaching · request 5개 URL 수동 요청
+2. **네이버 서치어드바이저** ✅ 소유확인 완료(2026-10-24) — `index.html`의 `naver-site-verification` 메타 태그와 루트의 `naverd3789227c3350a564f381da41a6093fd.html` 파일이 인증용이므로 삭제 금지. 사이트맵은 요청 → 사이트맵 제출에 `https://jobhandbook.github.io/sitemap.xml`, 새 글이 생기면 요청 → 웹 페이지 수집에 URL을 넣어 수동 요청(하루 50건).
 3. **네이버는 블로그 · 카페 글이 상위**이므로, Q&A 답변 중 좋은 것을 네이버 블로그에도 같은 제목으로 올리고 본문 끝에 사이트 링크를 넣는 것이 가장 효과적입니다. LinkedIn · 스레드 글에도 링크.
 
 **공개 Q&A → 검색용 정적 페이지 자동 생성 (✅ 동작 중).** `scripts/build-qa.mjs`가 DB의 공개 Q&A를 `q/<번호>-<질문>.html`로 만들고 `q/index.html` 목록과 `sitemap.xml`을 갱신합니다. `.github/workflows/build-qa.yml`이 매일 06:00(KST)에 실행하고, 변경이 있으면 `qa-bot`이 커밋합니다. 즉시 반영하려면 GitHub 저장소 Actions 탭 → "공개 Q&A 정적 페이지 생성" → Run workflow. 각 페이지에는 QAPage 구조화 데이터, 같은 주제의 다른 질문, 1:1 코칭 · 공개 코칭 링크가 들어갑니다. 비공개 질문은 절대 생성되지 않습니다.

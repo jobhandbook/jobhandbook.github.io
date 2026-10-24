@@ -413,7 +413,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 @media (max-width: 640px) { .gallery { grid-template-columns: 1fr; } }
 
 /* ---------- Proof strip (현장 · 서점 · 방송) ---------- */
-.proof { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 16px; align-items: stretch; }
+.proof { display: grid; grid-template-columns: 1.3fr 1fr; gap: 16px; align-items: stretch; }
 .proof figure { margin: 0; border-radius: var(--radius-s); overflow: hidden; position: relative; min-height: 240px; border: 1px solid var(--line); }
 .proof img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .proof figcaption {

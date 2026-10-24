@@ -107,7 +107,8 @@ writeFileSync(join(qDir, "index.html"), listHtml);
 for (const f of readdirSync(qDir)) if (!keep.has(f)) unlinkSync(join(qDir, f));
 
 // sitemap.xml 재생성
-const base = ["", "qna.html", "apply.html", "coaching.html", "request.html", "insight.html", "contact.html", "privacy.html"].map((p) => `  <url><loc>${SITE}/${p}</loc><changefreq>weekly</changefreq><priority>${p === "" ? "1.0" : p === "qna.html" ? "0.9" : p.startsWith("c") || p.startsWith("p") ? "0.4" : "0.8"}</priority></url>`);
+const PRI = { "": "1.0", "qna.html": "0.9", "apply.html": "0.8", "coaching.html": "0.8", "request.html": "0.8", "insight.html": "0.7", "contact.html": "0.4", "privacy.html": "0.1" };
+const base = Object.keys(PRI).map((p) => `  <url><loc>${SITE}/${p}</loc><changefreq>weekly</changefreq><priority>${PRI[p]}</priority></url>`);
 const qa = [`  <url><loc>${SITE}/q/index.html</loc><changefreq>daily</changefreq><priority>0.8</priority></url>`, ...pages.map((p) => `  <url><loc>${p.url}</loc><lastmod>${p.lastmod}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>`)];
 writeFileSync(join(ROOT, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${[...base, ...qa].join("\n")}\n</urlset>\n`);
 console.log(`generated ${pages.length} pages + q/index.html, sitemap updated`);

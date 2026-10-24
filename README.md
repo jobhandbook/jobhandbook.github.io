@@ -27,7 +27,9 @@
 2. **네이버 서치어드바이저** ⬜ 직접 등록 필요 — https://searchadvisor.naver.com → 웹마스터 도구 → 사이트 등록 `https://jobhandbook.github.io` → 소유 확인 'HTML 태그' 선택 → 나온 `<meta name="naver-site-verification" …>` 한 줄을 `index.html`의 `<head>`에 넣고 배포 → 소유확인 클릭 → 요청 → 사이트맵 제출 `https://jobhandbook.github.io/sitemap.xml` → 요청 → 웹 페이지 수집에서 메인 · qna · apply · coaching · request 5개 URL 수동 요청
 3. **네이버는 블로그 · 카페 글이 상위**이므로, Q&A 답변 중 좋은 것을 네이버 블로그에도 같은 제목으로 올리고 본문 끝에 사이트 링크를 넣는 것이 가장 효과적입니다. LinkedIn · 스레드 글에도 링크.
 
-구조적 한계와 다음 단계: 현재 Q&A는 DB에서 자바스크립트로 그리기 때문에 네이버 검색 로봇이 본문을 읽지 못할 수 있습니다. 답변이 20개쯤 쌓이면 GitHub Actions로 하루 한 번 DB의 공개 Q&A를 `q/서류-탈락-이유.html` 같은 정적 페이지로 자동 생성해 사이트맵에 추가하는 것이 검색 유입의 핵심입니다(README 로드맵 참고).
+**공개 Q&A → 검색용 정적 페이지 자동 생성 (✅ 동작 중).** `scripts/build-qa.mjs`가 DB의 공개 Q&A를 `q/<번호>-<질문>.html`로 만들고 `q/index.html` 목록과 `sitemap.xml`을 갱신합니다. `.github/workflows/build-qa.yml`이 매일 06:00(KST)에 실행하고, 변경이 있으면 `qa-bot`이 커밋합니다. 즉시 반영하려면 GitHub 저장소 Actions 탭 → "공개 Q&A 정적 페이지 생성" → Run workflow. 각 페이지에는 QAPage 구조화 데이터, 같은 주제의 다른 질문, 1:1 코칭 · 공개 코칭 링크가 들어갑니다. 비공개 질문은 절대 생성되지 않습니다.
+
+`index.html`에는 FAQ 구조화 데이터(FAQPage)도 들어 있어 구글 검색 결과에 질문-답변 형태로 노출될 수 있습니다. FAQ 문구를 바꾸면 `index.html` 상단의 JSON-LD도 같이 바꿔주세요.
 
 ## 배포 (2026-10-24)
 

@@ -22,8 +22,12 @@ create table if not exists public.questions (
   nickname text,
   question text not null,
   answer text,
-  answered_at timestamptz
+  answered_at timestamptz,
+  is_private boolean default false,   -- 비공개 요청: 공개하지 말고 이메일로만 답변
+  email text                          -- 비공개 요청 시 답변 받을 이메일
 );
+alter table public.questions add column if not exists is_private boolean default false;
+alter table public.questions add column if not exists email text;
 
 -- 3) 특강 신청 · 문의
 create table if not exists public.inquiries (
@@ -73,7 +77,7 @@ drop policy if exists "posts admin all"        on public.posts;
 create policy "settings public read"    on public.settings  for select using (true);
 create policy "settings admin all"      on public.settings  for all to authenticated using (true) with check (true);
 
-create policy "questions public read"   on public.questions for select using (status = 'published');
+create policy "questions public read"   on public.questions for select using (status = 'published' and is_private = false);
 create policy "questions public insert" on public.questions for insert to anon
   with check (status = 'pending' and answer is null);
 create policy "questions admin all"     on public.questions for all to authenticated using (true) with check (true);

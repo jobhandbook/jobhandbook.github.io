@@ -118,21 +118,28 @@ window.SITE = {
   }
   if (filters.length) filters.forEach((b) => b.addEventListener("click", () => { filters.forEach((x) => x.classList.remove("active")); b.classList.add("active"); applyFilter(); }));
 
-  // 질문 폼 (메인 히어로 + Q&A 페이지 공용)
+  // 질문 폼 (메인 + Q&A 페이지 공용) — 공개/비공개 선택, 비공개면 이메일 필수
   document.querySelectorAll("form.question-form").forEach((qForm) => {
+    const emailBox = qForm.querySelector(".vis-email");
+    const emailInput = emailBox ? emailBox.querySelector("input") : null;
+    qForm.querySelectorAll("input[name=visibility]").forEach((r) => r.addEventListener("change", () => {
+      const priv = qForm.querySelector("input[name=visibility]:checked").value === "private";
+      if (emailBox) { emailBox.hidden = !priv; if (emailInput) emailInput.required = priv; }
+    }));
     qForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const fd = new FormData(qForm);
       const note = qForm.querySelector(".form-note");
+      const isPrivate = fd.get("visibility") === "private";
       if (DB && DB.ready) {
         try {
-          await DB.submitQuestion({ category: fd.get("topic"), situation: fd.get("status"), question: fd.get("question"), nickname: fd.get("nickname") });
-          qForm.innerHTML = `<div class="form-ok">질문이 접수되었습니다. 답변이 등록되면 '무엇이든 물어보세요' 페이지에 공개됩니다. 급하면 오픈카톡방에서 바로 물어보세요.</div>`;
+          await DB.submitQuestion({ category: fd.get("topic"), situation: fd.get("status"), question: fd.get("question"), nickname: fd.get("nickname"), is_private: isPrivate, email: isPrivate ? fd.get("email") : null });
+          qForm.innerHTML = `<div class="form-ok">${isPrivate ? "접수됐습니다. 답변은 적어주신 이메일로만 보내드립니다. 어디에도 공개하지 않습니다." : "접수됐습니다. 답변이 올라오면 Q&A 페이지에서 볼 수 있습니다."} 바쁜 날은 조금 늦어도 반드시 답합니다.</div>`;
         } catch (err) {
           if (note) note.textContent = "전송에 실패했습니다. 잠시 후 다시 시도하거나 오픈카톡으로 질문해 주세요.";
         }
       } else {
-        const text = `[취업 Q&A 질문]\n상황: ${fd.get("status") || "-"}\n분야: ${CATS[fd.get("topic")] || fd.get("topic") || "-"}\n질문: ${fd.get("question") || "-"}`;
+        const text = `[취업 Q&A 질문${isPrivate ? " · 비공개" : ""}]\n상황: ${fd.get("status") || "-"}\n분야: ${CATS[fd.get("topic")] || fd.get("topic") || "-"}\n질문: ${fd.get("question") || "-"}${isPrivate ? "\n답변 이메일: " + fd.get("email") : ""}`;
         try { await navigator.clipboard.writeText(text); } catch (_) {}
         if (note) note.textContent = "질문 내용이 복사됐습니다. 열리는 오픈카톡방에 붙여넣기 해주세요.";
         window.open(S.kakaoUrl, "_blank", "noopener");

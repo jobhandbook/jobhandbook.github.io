@@ -323,6 +323,15 @@ ul { margin: 0; padding: 0; list-style: none; }
 .ask-band .hero-card { box-shadow: none; }
 @media (max-width: 900px) { .ask-grid { grid-template-columns: 1fr; gap: 28px; } }
 
+/* ---------- 공개 / 비공개 선택 ---------- */
+.vis-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.vis-opt { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border: 1px solid var(--line-2); border-radius: 8px; cursor: pointer; background: var(--bg); }
+.vis-opt:has(input:checked) { border-color: var(--accent); background: rgba(249,115,22,.08); }
+.vis-opt input { width: auto; margin-top: 3px; accent-color: var(--accent); }
+.vis-opt b { display: block; font-size: 13.5px; color: var(--ink); }
+.vis-opt small { display: block; font-size: 11.5px; color: var(--ink-3); line-height: 1.4; margin-top: 2px; }
+@media (max-width: 480px) { .vis-row { grid-template-columns: 1fr; } }
+
 /* ---------- Hero quick-ask form ---------- */
 .hero-ask .form { margin-top: 14px; }
 .hero-ask .form select, .hero-ask .form textarea { background: var(--bg); }

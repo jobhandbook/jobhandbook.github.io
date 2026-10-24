@@ -37,11 +37,12 @@ begin
   end if;
 
   if tg_table_name = 'questions' then
-    subject := '[취업핸드북] 새 질문: ' || left(new.question, 40);
-    body := '새 질문이 들어왔습니다.' || E'\n\n'
+    subject := '[취업핸드북] 새 질문' || case when coalesce(new.is_private, false) then ' (비공개 · 이메일 답변)' else '' end || ': ' || left(new.question, 40);
+    body := '새 질문이 들어왔습니다.' || case when coalesce(new.is_private, false) then ' ※ 비공개 요청 — 공개하지 말고 아래 이메일로만 답변' else '' end || E'\n\n'
          || '분류: ' || coalesce(new.category, '-') || E'\n'
          || '상황: ' || coalesce(new.situation, '-') || E'\n'
-         || '닉네임: ' || coalesce(new.nickname, '-') || E'\n\n'
+         || '닉네임: ' || coalesce(new.nickname, '-') || E'\n'
+         || '답변 이메일: ' || coalesce(new.email, '-') || E'\n\n'
          || new.question || E'\n\n'
          || '답변하기: ' || coalesce(cfg->>'site', '') || '/admin.html';
   else

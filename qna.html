@@ -152,8 +152,8 @@
 
     <aside class="qa-side">
       <div class="card">
-        <h3>새 질문 보내기</h3>
-        <p class="small muted" style="margin-bottom:14px">보내주신 질문 중 공통된 것은 이 페이지와 유튜브·스레드에서 답합니다. 개인 정보는 적지 마세요.</p>
+        <h3>무엇이든 물어보세요. 다 답합니다.</h3>
+        <p class="small muted" style="margin-bottom:14px">현직이라 낮에는 늦을 수 있지만 빠짐없이 답합니다. 비밀은 지킵니다.</p>
         <form class="form question-form" id="question-form">
           <div>
             <label for="q-status">현재 상황</label>
@@ -175,8 +175,16 @@
             <label for="q-text">질문</label>
             <textarea id="q-text" name="question" placeholder="상황을 2~3줄로 적고, 가장 궁금한 것 하나를 질문해 주세요." required></textarea>
           </div>
+          <div class="vis-row">
+            <label class="vis-opt"><input type="radio" name="visibility" value="public" checked /><span><b>공개로 답변</b><small>이름 없이 이 페이지에 공개됩니다.</small></span></label>
+            <label class="vis-opt"><input type="radio" name="visibility" value="private" /><span><b>비공개로 답변</b><small>이메일로만 답합니다.</small></span></label>
+          </div>
+          <div class="vis-email" hidden>
+            <label for="q-email">답변 받을 이메일</label>
+            <input id="q-email" name="email" type="email" placeholder="example@email.com" />
+          </div>
           <button class="btn btn-primary" type="submit">질문 보내기</button>
-          <p class="hint form-note">답변이 등록되면 이 페이지에 공개됩니다. 이름 · 연락처 같은 개인정보는 적지 마세요.</p>
+          <p class="hint form-note">보통 24시간 안에 답합니다. 바쁜 날은 조금 늦어도 반드시 답합니다.</p>
         </form>
       </div>
       <div class="card">

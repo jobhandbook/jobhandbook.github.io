@@ -82,8 +82,8 @@
   <div class="wrap ask-grid">
     <div class="reveal">
       <span class="eyebrow">질문 남기기</span>
-      <h2 class="h2">1분이면 됩니다</h2>
-      <p class="lead">왜 떨어졌는지. 어디로 가야 하는지.<br/>상황 두세 줄과 질문 하나.<br/>답변은 Q&A에 공개합니다.</p>
+      <h2 class="h2">무엇이든 물어보세요.<br/>다 답합니다.</h2>
+      <p class="lead">현직 채용 책임자라 낮에는 늦을 수 있습니다.<br/>그래도 최대한 빨리, 빠짐없이 답합니다.<br/>비밀은 지킵니다. 공개를 원치 않으면 이메일로만 답합니다.</p>
       <a class="btn btn-ghost" href="qna.html" style="margin-top:8px">지금까지의 답변 보기</a>
     </div>
     <aside class="hero-card hero-ask reveal" aria-label="질문 남기기">
@@ -107,8 +107,16 @@
           <textarea id="h-q" name="question" required placeholder="상황 두세 줄, 그리고 가장 궁금한 것 하나. 이름과 연락처는 쓰지 마세요."></textarea>
         </div>
         <input type="hidden" name="nickname" value="" />
+        <div class="vis-row">
+          <label class="vis-opt"><input type="radio" name="visibility" value="public" checked /><span><b>공개로 답변</b><small>이름 없이 Q&A에 공개. 같은 고민을 가진 사람도 봅니다.</small></span></label>
+          <label class="vis-opt"><input type="radio" name="visibility" value="private" /><span><b>비공개로 답변</b><small>이메일로만 답합니다. 어디에도 공개하지 않습니다.</small></span></label>
+        </div>
+        <div class="vis-email" hidden>
+          <label for="h-email">답변 받을 이메일</label>
+          <input id="h-email" name="email" type="email" placeholder="example@email.com" />
+        </div>
         <button class="btn btn-primary" type="submit" style="width:100%">보내기</button>
-        <p class="hint form-note">답변은 Q&A 페이지에 공개됩니다.</p>
+        <p class="hint form-note">보통 24시간 안에 답합니다. 바쁜 날은 조금 늦어도 반드시 답합니다.</p>
       </form>
     </aside>
   </div>

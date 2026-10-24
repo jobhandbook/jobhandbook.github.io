@@ -191,15 +191,16 @@
     const rows = qAll.filter((q) => qState === "all" || q.status === qState);
     $("#q-list").innerHTML = rows.length ? rows.map((q) => `
       <div class="admin-item ${q.status}" data-id="${q.id}">
-        <div class="meta"><span>#${q.id}</span><span>${fmtDate(q.created_at)}</span><span>${esc(q.situation || "")}</span><span>${esc(q.nickname || "")}</span><span class="badge ${q.status === "pending" ? "" : q.status === "published" ? "green" : "gray"}">${{ pending: "답변 대기", published: "공개됨", hidden: "비공개" }[q.status]}</span></div>
+        <div class="meta"><span>#${q.id}</span><span>${fmtDate(q.created_at)}</span><span>${esc(q.situation || "")}</span><span>${esc(q.nickname || "")}</span><span class="badge ${q.status === "pending" ? "" : q.status === "published" ? "green" : "gray"}">${{ pending: "답변 대기", published: "공개됨", hidden: "비공개" }[q.status]}</span>${q.is_private ? `<span class="badge red">비공개 요청 · 이메일로만 답변</span><span>${esc(q.email || "")}</span>` : ""}</div>
         <h4>Q. ${esc(q.question)}</h4>
         <label class="small muted">분류</label>
         <select class="q-cat" style="margin:4px 0 10px;max-width:220px">${catOptions}</select>
         <label class="small muted">답변</label>
-        <textarea class="q-answer" placeholder="답변을 적고 '공개 저장'을 누르면 사이트에 올라갑니다.">${esc(q.answer || "")}</textarea>
+        <textarea class="q-answer" placeholder="${q.is_private ? "답변을 적고 '이메일로 답장'을 누르면 메일 앱이 열립니다. 저장은 '답변 완료(비공개)'." : "답변을 적고 '공개 저장'을 누르면 사이트에 올라갑니다."}">${esc(q.answer || "")}</textarea>
         <div class="row">
-          <button class="btn btn-primary btn-sm" data-act="publish">공개 저장</button>
-          <button class="btn btn-ghost btn-sm" data-act="hide">비공개 저장</button>
+          ${q.is_private
+            ? `<button class="btn btn-primary btn-sm" data-act="mail">이메일로 답장</button><button class="btn btn-ghost btn-sm" data-act="hide">답변 완료 (비공개 저장)</button>`
+            : `<button class="btn btn-primary btn-sm" data-act="publish">공개 저장</button><button class="btn btn-ghost btn-sm" data-act="hide">비공개 저장</button>`}
           <button class="btn btn-ghost btn-sm" data-act="delete" style="color:var(--red)">삭제</button>
         </div>
       </div>`).join("") : `<p class="muted">해당 항목이 없습니다.</p>`;
@@ -211,6 +212,14 @@
     const item = b.closest(".admin-item"); const id = Number(item.dataset.id);
     const answer = item.querySelector(".q-answer").value.trim(); const category = item.querySelector(".q-cat").value;
     try {
+      if (b.dataset.act === "mail") {
+        const q = qAll.find((x) => x.id === id);
+        if (!answer) { alert("답변을 먼저 적어주세요."); return; }
+        await DB.updateQuestion(id, { answer, category });
+        const body = `안녕하세요, 서재민입니다.\n\n보내주신 질문:\n${q.question}\n\n답변:\n${answer}\n\n— 서재민 (취업핸드북) · jobhandbook.github.io`;
+        window.open(`mailto:${encodeURIComponent(q.email || "")}?subject=${encodeURIComponent("[취업핸드북] 질문에 대한 답변")}&body=${encodeURIComponent(body)}`, "_self");
+        return;
+      }
       if (b.dataset.act === "delete") { if (!confirm("이 질문을 삭제할까요?")) return; await DB.deleteQuestion(id); }
       else if (b.dataset.act === "publish") { if (!answer) { alert("답변을 입력하세요."); return; } await DB.updateQuestion(id, { answer, category, status: "published", answered_at: new Date().toISOString() }); }
       else { await DB.updateQuestion(id, { answer: answer || null, category, status: "hidden" }); }

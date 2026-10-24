@@ -36,7 +36,7 @@ window.DB = (function () {
       return data || [];
     },
     async submitQuestion(q) {
-      const { error } = await client.from("questions").insert({ category: q.category, situation: q.situation, question: q.question, nickname: q.nickname || null });
+      const { error } = await client.from("questions").insert({ category: q.category, situation: q.situation, question: q.question, nickname: q.nickname || null, is_private: !!q.is_private, email: q.email || null });
       if (error) fail(error);
     },
     async updateQuestion(id, patch) {

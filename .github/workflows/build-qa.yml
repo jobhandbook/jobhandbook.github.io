@@ -1,0 +1,26 @@
+name: 공개 Q&A 정적 페이지 생성
+
+on:
+  schedule:
+    - cron: "0 21 * * *"   # 매일 06:00 KST
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Q&A 페이지 생성
+        run: node scripts/build-qa.mjs
+      - name: 변경 사항 커밋
+        run: |
+          git config user.name "qa-bot"
+          git config user.email "qa-bot@users.noreply.github.com"
+          git add -A q sitemap.xml
+          if git diff --cached --quiet; then echo "변경 없음"; else git commit -m "Q&A 정적 페이지 갱신 [skip ci]" && git push; fi

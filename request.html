@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>특강 요청 — 대학 · 기관 · 기업 | 취업핸드북 서재민</title>
+<meta name="description" content="대학 · 취업지원기관 · 기업을 위한 취업특강과 채용 세미나 요청" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<header class="header">
+  <div class="wrap">
+    <a class="logo" href="index.html"><span class="logo-mark">J</span>취업핸드북 <span class="muted" style="font-weight:600">· 서재민</span></a>
+    <nav class="nav" aria-label="주요 메뉴">
+      <a href="qna.html">무엇이든 물어보세요</a>
+      <a href="index.html#lecture">공개 코칭</a>
+      <a href="coaching.html">1:1 코칭</a>
+      <a href="request.html">특강 요청</a>
+      <a href="index.html#profile">서재민은 누구</a>
+      <a href="insight.html">인사이트</a>
+      <a class="btn btn-primary btn-sm" href="apply.html">공개 코칭 신청</a>
+    </nav>
+    <button class="menu-btn" aria-label="메뉴 열기" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="wrap">
+    <span class="eyebrow">특강 요청 · 대학 · 기관 · 기업</span>
+    <h1>그 강의를, 우리 학생들에게</h1>
+    <p>고려대, 홍익대, 한양대, 경희대, 중앙대, 한국전파진흥협회에서 한 강의 그대로.<br/>대상과 시간에 맞춰 구성하고, 강의 후 1:1 상담까지 합니다.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap qa-layout">
+    <div>
+      <div class="grid-3" style="margin-bottom:28px">
+        <div class="card"><span class="num">대학 · 취업지원기관</span><h3>취업특강</h3><p>채용 트렌드, 직무 선정, 서류 · 링크드인 · 면접. 재학생 · 졸업생 대상 1~3시간. 『취업핸드북』 증정과 1:1 상담 포함.</p></div>
+        <div class="card"><span class="num">교육기관 · 부트캠프</span><h3>첫 직장, 어디로 가야 할까</h3><p>수료를 앞둔 교육생을 위한 첫 직장 선택 기준과 JD 기반 실행 계획. RAPA AXDX교육센터 특강 구성.</p></div>
+        <div class="card"><span class="num">기업 · HR</span><h3>채용 세미나</h3><p>TA 3.0 — 채용을 설계로. 그리팅 · 가인지 · 링글에서 한 강연을 사내 HR · 리더 대상으로.</p></div>
+      </div>
+
+      <div class="form-card">
+        <h3 style="font-size:20px;margin-bottom:6px">특강 요청</h3>
+        <p class="small muted" style="margin-bottom:20px">일정은 학교 · 기관에 맞춥니다. 강연료는 대상 · 시간 · 지역에 따라 개별 안내합니다.</p>
+        <form class="form" id="request-form">
+          <div class="form-grid">
+            <div><label for="r-org">기관 · 학교 · 회사 *</label><input id="r-org" name="org" required placeholder="예: ○○대학교 취업지원센터" /></div>
+            <div><label for="r-person">담당자 이름 *</label><input id="r-person" name="person" required /></div>
+            <div><label for="r-phone">연락처</label><input id="r-phone" name="phone" placeholder="010-0000-0000" /></div>
+            <div><label for="r-email">이메일 *</label><input id="r-email" name="email" type="email" required /></div>
+            <div><label for="r-audience">대상 *</label>
+              <select id="r-audience" name="audience" required><option>재학생 · 졸업생</option><option>교육과정 수료생</option><option>임직원 · HR</option><option>혼합</option></select></div>
+            <div><label for="r-size">예상 인원</label><input id="r-size" name="size" placeholder="예: 50명" /></div>
+            <div><label for="r-date">희망 일시 *</label><input id="r-date" name="date" required placeholder="예: 11월 둘째 주 평일 오후 / 미정" /></div>
+            <div><label for="r-mode">방식 · 장소</label><select id="r-mode" name="mode"><option>오프라인 (장소 제공)</option><option>온라인 (웨비나)</option><option>협의</option></select></div>
+            <div class="full"><label for="r-message">요청 내용 *</label><textarea id="r-message" name="message" required placeholder="강의 주제, 시간, 학생들의 상황, 기존에 진행한 특강이 있다면 그 내용도 적어주시면 구성에 반영합니다."></textarea></div>
+            <div class="full"><label for="r-budget">예산 범위 (선택)</label><input id="r-budget" name="budget" placeholder="정해진 강사료 기준이 있다면 적어주세요" /></div>
+            <div class="full check-row"><input type="checkbox" id="r-agree" required /><label for="r-agree">답변을 위한 개인정보(이름 · 연락처 · 이메일) 수집에 동의합니다. <a href="privacy.html" target="_blank" style="color:var(--accent)">개인정보처리방침</a></label></div>
+          </div>
+          <button class="btn btn-primary btn-lg" type="submit" style="margin-top:6px">요청 보내기</button>
+          <p class="hint form-note">보통 24시간 안에 답합니다.</p>
+        </form>
+      </div>
+    </div>
+
+    <aside class="qa-side">
+      <div class="card">
+        <h3>2025 – 2026 강연</h3>
+        <ul class="press">
+          <li><span class="date">2026</span><span><b>한국전파진흥협회(RAPA)</b><em>첫 직장, 어디로 가야 할까</em></span><span></span></li>
+          <li><span class="date">2026.05</span><span><b>중앙대 · 가인지 컨퍼런스</b><em>진로박람회 특강 · TA 3.0 연사</em></span><span></span></li>
+          <li><span class="date">2026.03</span><span><b>그리팅 채인지 세미나</b><em>인재 밀도 설계 전략 — 만족도 4.6/5</em></span><span></span></li>
+          <li><span class="date">2025.11</span><span><b>홍익대 · 고려대 · 한양대</b><em>릴레이 취업특강 · 글로벌 MBA</em></span><span></span></li>
+          <li><span class="date">2025.09</span><span><b>울산대 · 국립한밭대 · 대구시</b><em>채용 트렌드 강연 · 브릿지데이</em></span><span></span></li>
+          <li><span class="date">2025.04</span><span><b>경희대 · KAMPA</b><em>HR 전문가 과정 · 학술세미나</em></span><span></span></li>
+        </ul>
+      </div>
+      <figure style="margin:0;border-radius:10px;overflow:hidden;border:1px solid var(--line)">
+        <img src="img/seminar-greeting.jpg" alt="세미나 발표 현장" loading="lazy" style="width:100%;display:block" />
+      </figure>
+      <figure style="margin:0;border-radius:10px;overflow:hidden;border:1px solid var(--line)">
+        <img src="img/poster-2025-11.png" alt="홍익대 · 고려대 릴레이 취업특강 포스터" loading="lazy" style="width:100%;display:block" />
+      </figure>
+    </aside>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap">
+    <div><h4>취업핸드북 · 서재민</h4><p>취업 · 이직, 무엇이든 물어보세요.</p><p style="margin-top:10px" class="small">이메일 <a data-href="emailUrl" style="color:var(--accent-2)">joey.seo7@gmail.com</a> · LinkedIn <a data-href="linkedin" target="_blank" rel="noopener" style="color:var(--accent-2)">linkedin.com/in/joeyseo</a></p></div>
+    <div><h4>바로가기</h4><ul><li><a href="qna.html">무엇이든 물어보세요</a></li><li><a href="apply.html">공개 코칭 신청</a></li><li><a href="coaching.html">1:1 코칭</a></li><li><a href="privacy.html">개인정보처리방침</a></li></ul></div>
+    <div><h4>채널</h4><ul><li><a data-href="kakaoUrl" target="_blank" rel="noopener">오픈카톡방</a></li><li><a data-href="linkedin" target="_blank" rel="noopener">LinkedIn</a></li><li><a data-href="youtube" target="_blank" rel="noopener">YouTube</a></li></ul></div>
+    <div class="copy">© 2026 서재민. 본 사이트의 코칭 · 특강은 개인 자격으로 운영되며 소속 회사와 무관합니다.</div>
+  </div>
+</footer>
+
+<div class="float-cta">
+  <a class="btn btn-ghost" href="contact.html">문의</a>
+  <a class="btn btn-primary" href="#request-form">특강 요청</a>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/db.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

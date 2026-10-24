@@ -295,6 +295,8 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 .hero-card-cta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; padding-top: 18px; border-top: 1px dashed var(--line-2); }
 .hero-card-cta .btn { width: 100%; margin: 0; }
+.hero-grid > *, .ask-grid > *, .qa-layout > * { min-width: 0; }
+@media (max-width: 420px) { .hero-card-cta { grid-template-columns: 1fr; } }
 
 /* ---------- Hero visual (사진 · 책 · 현장) ---------- */
 .hero-visual { display: grid; gap: 14px; }
@@ -322,6 +324,19 @@ ul { margin: 0; padding: 0; list-style: none; }
 .ask-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 48px; align-items: center; }
 .ask-band .hero-card { box-shadow: none; }
 @media (max-width: 900px) { .ask-grid { grid-template-columns: 1fr; gap: 28px; } }
+
+/* ---------- 세 가지 길 (공개 코칭 · 1:1 코칭 · 특강 요청) ---------- */
+.paths { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.path { display: flex; flex-direction: column; gap: 8px; padding: 28px 24px 22px; background: var(--card); border: 1px solid var(--line); border-top: 3px solid var(--accent); border-radius: var(--radius-s); transition: .15s; position: relative; }
+.path:hover { border-color: var(--accent); transform: translateY(-3px); }
+.path .num { font-size: 12px; font-weight: 800; color: var(--accent); letter-spacing: .14em; }
+.path .who { font-size: 12.5px; color: var(--ink-3); font-weight: 600; }
+.path h3 { font-size: 24px; font-weight: 900; color: var(--ink); margin: 4px 0 2px; }
+.path p { font-size: 14.5px; color: var(--ink-2); flex: 1; }
+.path .next { font-size: 13px; color: var(--ink-3); padding-top: 10px; border-top: 1px solid var(--line); }
+.path .next b { color: var(--ink); font-weight: 700; }
+.path .go { font-size: 14px; font-weight: 800; color: var(--accent); margin-top: 6px; }
+@media (max-width: 900px) { .paths { grid-template-columns: 1fr; } }
 
 /* ---------- 공개 / 비공개 선택 ---------- */
 .vis-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }

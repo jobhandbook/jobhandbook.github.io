@@ -46,8 +46,8 @@ begin
          || new.question || E'\n\n'
          || '답변하기: ' || coalesce(cfg->>'site', '') || '/admin.html';
   else
-    subject := '[취업핸드북] 새 ' || case when new.type = 'apply' then '특강 신청' else '문의' end || ': ' || new.name;
-    body := case when new.type = 'apply' then '특강 신청서' else '문의' end || '가 접수되었습니다.' || E'\n\n'
+    subject := '[취업핸드북] 새 ' || case new.type when 'apply' then '공개 코칭 신청' when 'coaching' then '1:1 코칭 신청' when 'lecture' then '특강 요청' else '문의' end || ': ' || new.name;
+    body := case new.type when 'apply' then '공개 코칭 신청서' when 'coaching' then '1:1 코칭 신청서' when 'lecture' then '특강 요청' else '문의' end || '가 접수되었습니다.' || E'\n\n'
          || '이름: ' || new.name || E'\n'
          || '연락처: ' || coalesce(new.phone, '-') || E'\n'
          || '이메일: ' || coalesce(new.email, '-') || E'\n'

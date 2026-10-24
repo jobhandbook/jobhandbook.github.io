@@ -3,6 +3,32 @@
 현직 채용리더가 전수하는 취업준비 A to Z, 하루에 끝내기 (월 1~2회, 5시간 오프라인 특강) 홈페이지입니다.
 순수 HTML/CSS/JS 정적 사이트라 서버 없이 GitHub Pages, Vercel, Netlify, Cloudflare Pages 어디에나 그대로 올라갑니다.
 
+## 사이트의 목적과 구조 (최종, 2026-10-24)
+
+**Q&A는 훅, 수익은 세 갈래.** 방문자는 무료 질문으로 들어오고, 질문으로 안 풀리는 사람이 아래 셋 중 하나로 넘어가게 설계되어 있습니다.
+
+| 갈래 | 대상 | 페이지 | DB type |
+|---|---|---|---|
+| 공개 코칭 (취업준비 A to Z, 하루 5시간) | 취준생 · 첫 이직 | `apply.html` — 관리자가 일정을 공지하면 선착순 신청 | `apply` |
+| 1:1 취업 · 이직 코칭 | 취준생 · 이직자 | `coaching.html` | `coaching` |
+| 특강 요청 | 대학 · 기관 · 기업 | `request.html` | `lecture` |
+| 그 외 문의 | — | `contact.html` | `inquiry` |
+
+메인 흐름: 첫 화면(출제자의 의도) → 질문 띠(공개/비공개) → **세 가지 길** → 연락 타일 → 최근 Q&A → 공개 코칭 소개 + 다음 일정 → 채용 트렌드 → 커리큘럼 → … → 신청 방법. Q&A 답변 완료 메시지와 Q&A 페이지 사이드바에도 1:1 코칭 · 공개 코칭으로 가는 링크가 있습니다.
+
+**질문의 공개/비공개.** 질문 폼에서 '비공개로 답변'을 고르면 이메일이 필수가 되고, DB에 `is_private=true`로 저장됩니다. 비공개 질문은 사이트에 절대 공개되지 않으며(DB 읽기 규칙으로 차단), 관리자 페이지에서는 빨간 배지와 함께 '이메일로 답장' 버튼(답변 내용이 채워진 메일 앱 열기)이 보입니다.
+
+## 검색 노출 (SEO)
+
+넣어둔 것: 페이지별 `<title>`과 설명문에 검색어(취업 상담, 이직 코칭, 취업특강, 서류 탈락 이유, 채용담당자 등) 반영, `canonical`, Open Graph, 구조화 데이터(Person · Book · Service), `robots.txt`, `sitemap.xml`.
+
+직접 해야 하는 것 (각 10분):
+1. **Google Search Console** (https://search.google.com/search-console) → 속성 추가 `https://jobhandbook.github.io` → HTML 태그 방식으로 소유 확인(태그를 알려주시면 `index.html`에 넣습니다) → Sitemaps에 `https://jobhandbook.github.io/sitemap.xml` 제출
+2. **네이버 서치어드바이저** (https://searchadvisor.naver.com) → 사이트 등록 → HTML 태그로 소유 확인 → 사이트맵 제출 + RSS 없음 → '웹 페이지 수집 요청'으로 주요 페이지 5개 수동 요청
+3. **네이버는 블로그 · 카페 글이 상위**이므로, Q&A 답변 중 좋은 것을 네이버 블로그에도 같은 제목으로 올리고 본문 끝에 사이트 링크를 넣는 것이 가장 효과적입니다. LinkedIn · 스레드 글에도 링크.
+
+구조적 한계와 다음 단계: 현재 Q&A는 DB에서 자바스크립트로 그리기 때문에 네이버 검색 로봇이 본문을 읽지 못할 수 있습니다. 답변이 20개쯤 쌓이면 GitHub Actions로 하루 한 번 DB의 공개 Q&A를 `q/서류-탈락-이유.html` 같은 정적 페이지로 자동 생성해 사이트맵에 추가하는 것이 검색 유입의 핵심입니다(README 로드맵 참고).
+
 ## 배포 (2026-10-24)
 
 - **공개 주소: https://jobhandbook.github.io** — GitHub 저장소 `jobhandbook/jobhandbook.github.io`, 브랜치 `main`에서 GitHub Pages로 서비스

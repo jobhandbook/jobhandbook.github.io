@@ -33,7 +33,7 @@ alter table public.questions add column if not exists email text;
 create table if not exists public.inquiries (
   id bigint generated always as identity primary key,
   created_at timestamptz default now(),
-  type text not null check (type in ('apply','inquiry')),
+  type text not null check (type in ('apply','coaching','lecture','inquiry')),  -- 공개 코칭 신청 / 1:1 코칭 / 특강 요청 / 문의
   name text not null,
   phone text,
   email text,
@@ -56,6 +56,9 @@ create table if not exists public.posts (
   published boolean default false,
   published_at timestamptz
 );
+
+alter table public.inquiries drop constraint if exists inquiries_type_check;
+alter table public.inquiries add constraint inquiries_type_check check (type in ('apply','coaching','lecture','inquiry'));
 
 -- RLS 켜기
 alter table public.settings  enable row level security;

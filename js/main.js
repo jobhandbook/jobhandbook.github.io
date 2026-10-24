@@ -134,7 +134,7 @@ window.SITE = {
       if (DB && DB.ready) {
         try {
           await DB.submitQuestion({ category: fd.get("topic"), situation: fd.get("status"), question: fd.get("question"), nickname: fd.get("nickname"), is_private: isPrivate, email: isPrivate ? fd.get("email") : null });
-          qForm.innerHTML = `<div class="form-ok">${isPrivate ? "접수됐습니다. 답변은 적어주신 이메일로만 보내드립니다. 어디에도 공개하지 않습니다." : "접수됐습니다. 답변이 올라오면 Q&A 페이지에서 볼 수 있습니다."} 바쁜 날은 조금 늦어도 반드시 답합니다.</div>`;
+          qForm.innerHTML = `<div class="form-ok">${isPrivate ? "접수됐습니다. 답변은 적어주신 이메일로만 보내드립니다. 어디에도 공개하지 않습니다." : "접수됐습니다. 답변이 올라오면 Q&A 페이지에서 볼 수 있습니다."} 바쁜 날은 조금 늦어도 반드시 답합니다.<br/><span class="small muted">내 서류와 면접을 직접 봐야 하는 문제라면 <a href="coaching.html" style="color:var(--accent)">1:1 코칭</a>, 기준부터 세우려면 <a href="apply.html" style="color:var(--accent)">공개 코칭</a>.</span></div>`;
         } catch (err) {
           if (note) note.textContent = "전송에 실패했습니다. 잠시 후 다시 시도하거나 오픈카톡으로 질문해 주세요.";
         }
@@ -164,30 +164,42 @@ window.SITE = {
     }).catch(() => {});
   }
 
-  // ---------- 신청 · 문의 폼 ----------
+  // ---------- 신청 · 문의 폼 (공개 코칭 신청 / 1:1 코칭 / 특강 요청 / 문의) ----------
+  const TYPE_LABEL = { apply: "공개 코칭 신청", coaching: "1:1 코칭 신청", lecture: "특강 요청", inquiry: "문의" };
+  const OK_MSG = {
+    apply: "신청이 접수되었습니다. 24시간 안에 확정 여부와 수강료 · 입금 방법을 연락처로 안내드립니다.",
+    coaching: "신청이 접수되었습니다. 24시간 안에 먼저 답을 드리고, 코칭이 필요하다면 진행 방식과 비용을 안내드립니다.",
+    lecture: "요청이 접수되었습니다. 24시간 안에 가능한 일정과 구성안을 이메일로 보내드립니다.",
+    inquiry: "문의가 접수되었습니다. 24시간 안에 답변드리겠습니다.",
+  };
+  // 폼마다 필드 구성이 달라 DB 컬럼(name/phone/email/situation/session/message)에 맞춰 합칩니다.
+  const BUILDERS = {
+    apply: (fd) => ({ name: fd.get("name"), phone: fd.get("phone"), email: fd.get("email"), situation: fd.get("situation"), session: fd.get("session"), message: fd.get("message") }),
+    inquiry: (fd) => ({ name: fd.get("name"), phone: fd.get("phone"), email: fd.get("email"), situation: fd.get("situation"), session: null, message: fd.get("message") }),
+    coaching: (fd) => ({ name: fd.get("name"), phone: fd.get("phone"), email: fd.get("email"), situation: `${fd.get("kind")} · ${fd.get("situation")}`, session: [fd.get("mode"), fd.get("time")].filter(Boolean).join(" · "), message: [fd.get("target") ? "목표: " + fd.get("target") : "", fd.get("message")].filter(Boolean).join("\n") }),
+    lecture: (fd) => ({ name: `${fd.get("org")} · ${fd.get("person")}`, phone: fd.get("phone"), email: fd.get("email"), situation: [fd.get("audience"), fd.get("size")].filter(Boolean).join(" · "), session: [fd.get("date"), fd.get("mode")].filter(Boolean).join(" · "), message: [fd.get("message"), fd.get("budget") ? "예산: " + fd.get("budget") : ""].filter(Boolean).join("\n") }),
+  };
   async function handleInquiry(form, type) {
     const fd = new FormData(form);
-    const payload = {
-      type, name: fd.get("name"), phone: fd.get("phone") || null, email: fd.get("email") || null,
-      situation: fd.get("situation") || null, session: fd.get("session") || null, message: fd.get("message") || null,
-    };
+    const b = BUILDERS[type](fd);
+    const payload = { type, name: b.name, phone: b.phone || null, email: b.email || null, situation: b.situation || null, session: b.session || null, message: b.message || null };
     const note = form.querySelector(".form-note");
     if (DB && DB.ready) {
       try {
         await DB.submitInquiry(payload);
-        form.innerHTML = `<div class="form-ok">${type === "apply" ? "신청이 접수되었습니다. 24시간 안에 수강료 · 입금 방법과 확정 여부를 연락처로 안내드립니다." : "문의가 접수되었습니다. 24시간 안에 답변드리겠습니다."}</div>`;
+        form.innerHTML = `<div class="form-ok">${OK_MSG[type]}</div>`;
       } catch (err) {
         if (note) note.textContent = "전송에 실패했습니다. 잠시 후 다시 시도하거나 오픈카톡으로 연락 주세요.";
       }
     } else {
-      const text = `[${type === "apply" ? "특강 신청" : "문의"}]\n이름: ${payload.name}\n연락처: ${payload.phone || "-"}\n이메일: ${payload.email || "-"}\n상황: ${payload.situation || "-"}\n희망 회차: ${payload.session || "-"}\n내용: ${payload.message || "-"}`;
+      const text = `[${TYPE_LABEL[type]}]\n이름: ${payload.name}\n연락처: ${payload.phone || "-"}\n이메일: ${payload.email || "-"}\n상황: ${payload.situation || "-"}\n일정/방식: ${payload.session || "-"}\n내용: ${payload.message || "-"}`;
       try { await navigator.clipboard.writeText(text); } catch (_) {}
-      if (note) note.textContent = "내용이 복사됐습니다. 열리는 오픈카톡방에 붙여넣기 해주세요. (온라인 접수는 관리자 설정 후 활성화됩니다)";
+      if (note) note.textContent = "내용이 복사됐습니다. 열리는 오픈카톡방에 붙여넣기 해주세요.";
       window.open(S.kakaoUrl, "_blank", "noopener");
     }
   }
-  const applyForm = document.querySelector("#apply-form");
-  if (applyForm) applyForm.addEventListener("submit", (e) => { e.preventDefault(); handleInquiry(applyForm, "apply"); });
-  const contactForm = document.querySelector("#contact-form");
-  if (contactForm) contactForm.addEventListener("submit", (e) => { e.preventDefault(); handleInquiry(contactForm, "inquiry"); });
+  [["#apply-form", "apply"], ["#contact-form", "inquiry"], ["#coaching-form", "coaching"], ["#request-form", "lecture"]].forEach(([sel, type]) => {
+    const f = document.querySelector(sel);
+    if (f) f.addEventListener("submit", (e) => { e.preventDefault(); handleInquiry(f, type); });
+  });
 })();

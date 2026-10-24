@@ -103,7 +103,7 @@
     <!-- 신청 · 문의 -->
     <div class="admin-panel" id="panel-inquiries">
       <div class="qa-filter" id="i-filter">
-        <button class="active" data-type="apply">특강 신청</button><button data-type="inquiry">문의</button><button data-type="all">전체</button>
+        <button class="active" data-type="all">전체</button><button data-type="apply">공개 코칭 신청</button><button data-type="coaching">1:1 코칭</button><button data-type="lecture">특강 요청</button><button data-type="inquiry">문의</button>
       </div>
       <div class="admin-list" id="i-list"></div>
     </div>
@@ -236,7 +236,8 @@
   });
 
   // ---- inquiries ----
-  let iAll = []; let iType = "apply";
+  let iAll = []; let iType = "all";
+  const TYPE_LABEL = { apply: "공개 코칭 신청", coaching: "1:1 코칭", lecture: "특강 요청", inquiry: "문의" };
   async function loadInquiries() {
     iAll = await DB.allInquiries();
     const unread = iAll.filter((i) => !i.is_read).length;
@@ -247,9 +248,9 @@
     const rows = iAll.filter((i) => iType === "all" || i.type === iType);
     $("#i-list").innerHTML = rows.length ? rows.map((i) => `
       <div class="admin-item ${i.is_read ? "" : "pending"}" data-id="${i.id}">
-        <div class="meta"><span class="badge ${i.type === "apply" ? "" : "gray"}">${i.type === "apply" ? "특강 신청" : "문의"}</span><span>${fmtDate(i.created_at)}</span>${i.is_read ? "" : '<span class="badge red">새 접수</span>'}</div>
+        <div class="meta"><span class="badge ${i.type === "inquiry" ? "gray" : ""}">${TYPE_LABEL[i.type] || i.type}</span><span>${fmtDate(i.created_at)}</span>${i.is_read ? "" : '<span class="badge red">새 접수</span>'}</div>
         <h4>${esc(i.name)} · ${esc(i.phone || "-")} · ${esc(i.email || "-")}</h4>
-        <pre>상황/유형: ${esc(i.situation || "-")}${i.session ? "\n희망 회차: " + esc(i.session) : ""}\n내용: ${esc(i.message || "-")}</pre>
+        <pre>상황/대상: ${esc(i.situation || "-")}${i.session ? "\n일정/방식: " + esc(i.session) : ""}\n내용: ${esc(i.message || "-")}</pre>
         <label class="small muted">메모 (입금 확인, 연락 여부 등)</label>
         <textarea class="i-memo" style="min-height:60px">${esc(i.memo || "")}</textarea>
         <div class="row">

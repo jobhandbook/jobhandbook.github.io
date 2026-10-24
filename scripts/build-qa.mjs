@@ -63,7 +63,7 @@ for (const r of rows) {
   const file = `${slug}.html`;
   keep.add(file);
   const url = `${SITE}/q/${encodeURI(file)}`;
-  const title = `Q. ${r.question} — 채용담당자의 답 | 취업핸드북 서재민`;
+  const title = `Q. ${r.question} — 채용담당자의 답 | ${CATS[r.category] || "취업"} 취업 상담 · 취업핸드북`;
   const desc = String(r.answer).replace(/\s+/g, " ").slice(0, 150);
   const ld = `<script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@type": "QAPage", mainEntity: { "@type": "Question", name: r.question, text: r.question, answerCount: 1, dateCreated: r.created_at, acceptedAnswer: { "@type": "Answer", text: r.answer, dateCreated: r.answered_at, author: { "@type": "Person", name: "서재민", url: SITE + "/" } } } })}</script>`;
   const related = rows.filter((x) => x.id !== r.id && x.category === r.category).slice(0, 4);
@@ -92,9 +92,9 @@ ${footer}
 }
 
 // 목록 페이지
-const listHtml = `${head("취업·이직 Q&A 전체 목록 — 채용담당자가 직접 답한 " + rows.length + "개 | 취업핸드북 서재민", "서류 탈락 이유, 첫 직장 선택, 면접, 링크드인, 이직, 연봉협상. 현직 채용 책임자 서재민이 답한 질문 전체 목록.", `${SITE}/q/index.html`)}
+const listHtml = `${head("취업 상담 · 이직 상담 Q&A 전체 목록 — 채용담당자가 직접 답한 " + rows.length + "개 | 취업핸드북 서재민", "취업준비 · 이직준비 질문 모음. 서류 탈락 이유, 자소서, 첫 직장 선택, 면접 준비, 링크드인, 이직 타이밍, 연봉협상. 현직 채용 책임자 서재민이 답한 질문 전체 목록.", `${SITE}/q/index.html`)}
 ${nav}
-<section class="page-hero"><div class="wrap"><span class="eyebrow">취업 · 이직 Q&A</span><h1>지금까지의 답변 ${rows.length}개</h1><p>채용하는 사람이 직접 답했습니다. 위로 대신, 지금 바꿀 한 가지만.</p></div></section>
+<section class="page-hero"><div class="wrap"><span class="eyebrow">취업 상담 · 이직 상담 Q&A</span><h1>지금까지의 답변 ${rows.length}개</h1><p>채용하는 사람이 직접 답했습니다. 위로 대신, 지금 바꿀 한 가지만.</p></div></section>
 <section class="section"><div class="wrap">
 ${rows.length ? `<ul class="press">${pages.map((p) => `<li><span class="date">${fmt(p.date)}</span><span><a href="${encodeURI(p.file)}"><b>Q. ${esc(p.title)}</b></a><em>${esc(CATS[p.cat] || "기타")}</em></span><a class="more" href="${encodeURI(p.file)}">답변 →</a></li>`).join("")}</ul>` : `<p class="muted">아직 공개된 답변이 없습니다. 첫 질문을 남겨주세요.</p>`}
 <div style="margin-top:32px"><a class="btn btn-primary" href="../qna.html#question-form">질문 남기기</a></div>

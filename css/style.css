@@ -133,9 +133,12 @@ ul { margin: 0; padding: 0; list-style: none; }
 .hero-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 56px; align-items: center; }
 .hero h1 { font-size: clamp(32px, 4.8vw, 54px); font-weight: 900; margin: 18px 0 20px; color: #fff; }
 .hero h1 em { font-style: normal; color: var(--accent); }
-.hero .lead { color: rgba(255,255,255,.78); font-size: 18px; }
+.hero .lead { color: rgba(255,255,255,.78); font-size: 18px; line-height: 1.75; }
+.section .lead br { display: inline; }
 .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
 .hero-tags .badge { background: rgba(255,255,255,.06); color: #ddd; border-color: var(--line-2); }
+.hero-tags.hash .badge { background: transparent; border: 0; padding: 4px 6px; color: var(--accent-2); font-size: 14px; font-weight: 700; letter-spacing: 0; }
+.hero-tags.hash { gap: 4px 10px; }
 .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
 .hero-note { margin-top: 14px; font-size: 13.5px; color: rgba(255,255,255,.55); }
 

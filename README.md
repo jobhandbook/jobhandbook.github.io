@@ -3,6 +3,16 @@
 현직 채용리더가 전수하는 취업준비 A to Z, 하루에 끝내기 (월 1~2회, 5시간 오프라인 특강) 홈페이지입니다.
 순수 HTML/CSS/JS 정적 사이트라 서버 없이 GitHub Pages, Vercel, Netlify, Cloudflare Pages 어디에나 그대로 올라갑니다.
 
+## 배포 (2026-10-24)
+
+- **공개 주소: https://jobhandbook.github.io** — GitHub 저장소 `jobhandbook/jobhandbook.github.io`, 브랜치 `main`에서 GitHub Pages로 서비스
+- 2026년 7월에 올렸던 이전 개인 사이트는 `master` 브랜치(로컬 `old-site`)에 그대로 남아 있어 언제든 복구 가능
+- 수정 후 반영 방법: 파일 고치고 아래 두 줄 (1~2분 뒤 사이트에 반영)
+  ```bash
+  git add -A; git commit -m "수정 내용"
+  git push
+  ```
+
 ## 현재 연결 상태 (2026-10-24)
 
 - Supabase 프로젝트 **job-handbook** (조직 Job Handbook, 리전 시드니 — 생성 당시 서울 리전 장애로 자동 배정) 생성 완료
@@ -72,16 +82,9 @@
 - 장소 "서울 (강의장 확정 시 공지)", 일정 "2026년 11월".
 - 1기 한정 『취업핸드북』 사인본 증정 — 제공 여부 확인 필요.
 
-## 배포 (GitHub Pages 예시)
+## 커스텀 도메인 (선택)
 
-```bash
-git init
-git add .
-git commit -m "취업특강 홈페이지 v1"
-gh repo create job-handbook-site --public --source=. --push
-```
-
-그 다음 GitHub 저장소 Settings → Pages → Branch `main` / root 선택. 몇 분 뒤 `https://<계정>.github.io/job-handbook-site/` 로 접속됩니다. 커스텀 도메인(예: `jobhandbook.kr`)은 같은 화면에서 연결합니다.
+`jobhandbook.kr` 같은 도메인을 사면 GitHub 저장소 Settings → Pages → Custom domain에 입력하고, 도메인 업체에서 CNAME을 `jobhandbook.github.io`로 가리키면 됩니다. 그 뒤 Supabase `notify_config`의 `site` 값도 새 주소로 바꾸세요.
 
 ## 다음 단계 로드맵 (Action Plan과 매핑)
 

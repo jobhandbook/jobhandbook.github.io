@@ -112,3 +112,15 @@ const base = Object.keys(PRI).map((p) => `  <url><loc>${SITE}/${p}</loc><changef
 const qa = [`  <url><loc>${SITE}/q/index.html</loc><changefreq>daily</changefreq><priority>0.8</priority></url>`, ...pages.map((p) => `  <url><loc>${p.url}</loc><lastmod>${p.lastmod}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>`)];
 writeFileSync(join(ROOT, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${[...base, ...qa].join("\n")}\n</urlset>\n`);
 console.log(`generated ${pages.length} pages + q/index.html, sitemap updated`);
+
+// IndexNow: 네이버 · Bing 등에 URL 수집 요청 (키 파일은 사이트 루트의 <key>.txt)
+const INDEXNOW_KEY = "a7c3e91f4b2d48e6b5f0c1d2e3a4b5c6";
+const urlList = [...Object.keys(PRI).map((p) => `${SITE}/${p}`), `${SITE}/q/index.html`, ...pages.map((p) => p.url)];
+try {
+  const r = await fetch("https://api.indexnow.org/indexnow", {
+    method: "POST",
+    headers: { "Content-Type": "application/json; charset=utf-8" },
+    body: JSON.stringify({ host: "jobhandbook.github.io", key: INDEXNOW_KEY, keyLocation: `${SITE}/${INDEXNOW_KEY}.txt`, urlList }),
+  });
+  console.log(`IndexNow: ${r.status} (${urlList.length} urls)`);
+} catch (e) { console.log("IndexNow skipped:", e.message); }

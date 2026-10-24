@@ -131,7 +131,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   content: ""; position: absolute; left: 0; right: 0; top: 0; height: 4px; background: var(--accent);
 }
 .hero-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 56px; align-items: center; }
-.hero h1 { font-size: clamp(32px, 4.8vw, 54px); font-weight: 900; margin: 18px 0 20px; color: #fff; }
+.hero h1 { font-size: clamp(30px, 4.1vw, 48px); font-weight: 900; margin: 18px 0 20px; color: #fff; letter-spacing: -0.03em; }
 .hero h1 em { font-style: normal; color: var(--accent); }
 .hero .lead { color: rgba(255,255,255,.78); font-size: 18px; line-height: 1.75; }
 .section .lead br { display: inline; }
@@ -295,6 +295,33 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 .hero-card-cta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; padding-top: 18px; border-top: 1px dashed var(--line-2); }
 .hero-card-cta .btn { width: 100%; margin: 0; }
+
+/* ---------- Hero visual (사진 · 책 · 현장) ---------- */
+.hero-visual { display: grid; gap: 14px; }
+.hv-stage {
+  position: relative; aspect-ratio: 1 / 1.05; border-radius: 16px; overflow: hidden;
+  background: radial-gradient(420px 360px at 55% 95%, rgba(249,115,22,.45), transparent 70%), linear-gradient(180deg, #141414, #000);
+  border: 1px solid var(--line); border-top: 4px solid var(--accent); box-shadow: var(--shadow);
+}
+.hv-photo { position: absolute; left: 50%; bottom: 0; transform: translateX(-58%); height: 92%; width: auto; object-fit: contain; }
+.hv-book { position: absolute; right: 6%; bottom: 20%; width: 31%; transform: rotate(6deg); filter: drop-shadow(0 20px 30px rgba(0,0,0,.6)); }
+.hv-card {
+  position: absolute; left: 0; right: 0; bottom: 0; padding: 48px 20px 16px; display: grid; gap: 2px;
+  background: linear-gradient(180deg, transparent, rgba(0,0,0,.92)); color: var(--ink-2); font-size: 12.5px;
+}
+.hv-card b { font-size: 20px; color: #fff; font-weight: 900; }
+.hv-card b span { font-size: 13px; font-weight: 600; color: var(--ink-3); margin-left: 6px; }
+.hv-card > span { line-height: 1.5; }
+.hv-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.hv-strip img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); opacity: .7; transition: opacity .2s; }
+.hv-strip img:hover { opacity: 1; }
+@media (max-width: 900px) { .hero-visual { max-width: 440px; } }
+
+/* ---------- Ask band ---------- */
+.ask-band { background: var(--bg-2); }
+.ask-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 48px; align-items: center; }
+.ask-band .hero-card { box-shadow: none; }
+@media (max-width: 900px) { .ask-grid { grid-template-columns: 1fr; gap: 28px; } }
 
 /* ---------- Hero quick-ask form ---------- */
 .hero-ask .form { margin-top: 14px; }

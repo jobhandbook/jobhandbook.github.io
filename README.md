@@ -22,9 +22,9 @@
 
 넣어둔 것: 페이지별 `<title>`과 설명문에 검색어(취업 상담, 이직 코칭, 취업특강, 서류 탈락 이유, 채용담당자 등) 반영, `canonical`, Open Graph, 구조화 데이터(Person · Book · Service), `robots.txt`, `sitemap.xml`.
 
-직접 해야 하는 것 (각 10분):
-1. **Google Search Console** (https://search.google.com/search-console) → 속성 추가 `https://jobhandbook.github.io` → HTML 태그 방식으로 소유 확인(태그를 알려주시면 `index.html`에 넣습니다) → Sitemaps에 `https://jobhandbook.github.io/sitemap.xml` 제출
-2. **네이버 서치어드바이저** (https://searchadvisor.naver.com) → 사이트 등록 → HTML 태그로 소유 확인 → 사이트맵 제출 + RSS 없음 → '웹 페이지 수집 요청'으로 주요 페이지 5개 수동 요청
+상태 (2026-10-24):
+1. **Google Search Console** ✅ 완료 — joey.seo7@gmail.com 소유, HTML 파일(`google131d8bf31ff5e109.html`, 지우면 안 됨)로 확인, `sitemap.xml` 제출. 제출 직후 상태는 "가져올 수 없음"으로 보이는 게 정상이며 하루 이틀 안에 "성공"으로 바뀜. 대시보드: https://search.google.com/search-console?resource_id=https://jobhandbook.github.io/
+2. **네이버 서치어드바이저** ⬜ 직접 등록 필요 — https://searchadvisor.naver.com → 웹마스터 도구 → 사이트 등록 `https://jobhandbook.github.io` → 소유 확인 'HTML 태그' 선택 → 나온 `<meta name="naver-site-verification" …>` 한 줄을 `index.html`의 `<head>`에 넣고 배포 → 소유확인 클릭 → 요청 → 사이트맵 제출 `https://jobhandbook.github.io/sitemap.xml` → 요청 → 웹 페이지 수집에서 메인 · qna · apply · coaching · request 5개 URL 수동 요청
 3. **네이버는 블로그 · 카페 글이 상위**이므로, Q&A 답변 중 좋은 것을 네이버 블로그에도 같은 제목으로 올리고 본문 끝에 사이트 링크를 넣는 것이 가장 효과적입니다. LinkedIn · 스레드 글에도 링크.
 
 구조적 한계와 다음 단계: 현재 Q&A는 DB에서 자바스크립트로 그리기 때문에 네이버 검색 로봇이 본문을 읽지 못할 수 있습니다. 답변이 20개쯤 쌓이면 GitHub Actions로 하루 한 번 DB의 공개 Q&A를 `q/서류-탈락-이유.html` 같은 정적 페이지로 자동 생성해 사이트맵에 추가하는 것이 검색 유입의 핵심입니다(README 로드맵 참고).

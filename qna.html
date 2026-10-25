@@ -3,17 +3,18 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>취업 상담 · 이직 상담 Q&A — 서류 탈락, 자소서, 면접, 첫 직장, 링크드인 | 채용담당자가 직접 답합니다</title>
-<meta name="description" content="취업 고민, 이직 고민 무엇이든 물어보세요. 현직 채용 책임자가 직접 답하는 무료 취업 상담 · 이직 상담 Q&A. 서류 탈락 이유, 자소서, 면접 준비, 첫 직장 선택, 링크드인, 외국계, 이직 타이밍, 연봉협상. 비공개 질문 가능." />
+<title>취업 상담 · 이직 상담 라운지 — 서류 탈락, 자소서, 면접, 첫 직장, 링크드인 | 채용담당자가 직접 답합니다</title>
+<meta name="description" content="취업 고민, 이직 고민 무엇이든 물어보세요. 현직 채용 책임자가 직접 답하고, 취준생과 경력자가 댓글로 함께 이야기하는 무료 취업 상담 · 이직 상담 라운지. 서류 탈락 이유, 자소서, 면접 준비, 첫 직장 선택, 링크드인, 이직 타이밍, 연봉협상. 가입 없이, 비공개 질문 가능." />
 <link rel="canonical" href="https://jobhandbook.github.io/qna.html" />
-<meta property="og:title" content="취업 상담 · 이직 상담 Q&A — 채용담당자가 직접 답합니다 | 서재민" />
-<meta property="og:description" content="서류 탈락 이유, 첫 직장, 1분 자기소개, 링크드인, 외국계, 이직, 연봉협상. 무료, 비공개 가능." />
+<meta property="og:title" content="취업 상담 · 이직 상담 라운지 — 채용담당자가 직접 답합니다 | 서재민" />
+<meta property="og:description" content="질문은 무료, 가입 없음. 채용담당자가 답하고 취준생 · 경력자가 댓글로 함께 이야기합니다. 비공개 질문 가능." />
 <meta property="og:image" content="https://jobhandbook.github.io/img/profile-slide.png" />
 <meta property="og:url" content="https://jobhandbook.github.io/qna.html" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/lounge.css" />
 </head>
 <body>
 
@@ -35,13 +36,13 @@
 
 <section class="page-hero">
   <div class="wrap">
-    <span class="eyebrow">취업 상담 · 이직 상담 Q&A</span>
+    <span class="eyebrow">취업 상담 · 이직 상담 라운지</span>
     <h1>무엇이든 물어보세요</h1>
-    <p>채용하는 사람이 직접 답합니다.<br/>위로 대신, 지금 바꿀 한 가지만.</p>
+    <p>채용하는 사람이 직접 답합니다. 같은 길을 먼저 간 사람들이 댓글로 보탭니다.<br/>가입 없이, 닉네임만으로.</p>
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">
+      <a class="btn btn-primary btn-sm" href="#question-form">질문 남기기</a>
       <a class="btn btn-kakao btn-sm" data-href="kakaoUrl" target="_blank" rel="noopener">오픈카톡방에서 바로 질문</a>
       <a class="btn btn-ghost btn-sm" data-href="linkedin" target="_blank" rel="noopener"><svg class="li-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>LinkedIn 1촌 신청</a>
-      <a class="btn btn-ghost btn-sm" data-href="emailUrl">✉ joey.seo7@gmail.com</a>
     </div>
   </div>
 </section>
@@ -49,122 +50,45 @@
 <section class="section">
   <div class="wrap qa-layout">
     <div>
-      <div class="qa-filter" role="tablist" aria-label="질문 분류">
-        <button class="active" data-cat="all">전체</button>
-        <button data-cat="prep">취업 준비</button>
-        <button data-cat="docs">서류</button>
-        <button data-cat="linkedin">링크드인</button>
-        <button data-cat="interview">면접</button>
-        <button data-cat="job">이직 · 연봉</button>
-        <button data-cat="foreign">외국계</button>
+      <div class="lounge-bar">
+        <div class="qa-filter board-filter" role="tablist" aria-label="말머리">
+          <button class="active" data-board="all">전체</button>
+          <button data-board="prep">취준</button>
+          <button data-board="job">이직</button>
+          <button data-board="review">후기</button>
+          <button data-board="talk">고민</button>
+        </div>
+        <div class="sort-filter" aria-label="정렬">
+          <button class="active" data-sort="new">최신</button>
+          <button data-sort="hot">댓글 많은</button>
+          <button data-sort="wait">답변 대기</button>
+        </div>
       </div>
+      <p class="lounge-intro">지금까지 <b><span id="lounge-count">—</span>개</b>의 질문. 답변 대기 중인 질문에도 먼저 의견을 남길 수 있습니다. <span class="badge-admin">채용담당자</span> 표시가 서재민의 답과 댓글입니다.</p>
 
-      <div id="qa-dynamic"></div>
-      <div id="qa-static">
-      <div class="qa-item" data-cat="docs">
-        <div class="meta"><span class="badge gray">서류</span><span>취준생 Q&A</span></div>
-        <h3>Q. 서류에서 계속 떨어집니다. 자소서를 더 다듬어야 할까요?</h3>
-        <div class="a"><b>A.</b> 대부분은 자소서 문제가 아니라 <b>직무 매칭</b> 문제입니다. 채용담당자는 이력서를 30초 안에 보고 "공고의 자격요건과 이 사람의 경험이 맞는가"를 먼저 판단합니다. 공고의 자격요건·우대사항을 한 줄씩 적고, 각 줄 옆에 내 경험을 한 줄씩 붙여보세요. 절반 이상 비어 있으면 자소서를 고쳐도 통과율은 안 오릅니다. 비어 있는 줄을 채울 경험(인턴, 프로젝트, 자격)을 만드는 게 먼저입니다.</div>
-      </div>
+      <div id="lounge"><p class="muted small" style="padding:24px 0">불러오는 중…</p></div>
 
-      <div class="qa-item" data-cat="prep">
-        <div class="meta"><span class="badge gray">취업 준비</span><span>재학생</span></div>
-        <h3>Q. 3학년입니다. 지금 뭘 가장 먼저 해야 하나요?</h3>
-        <div class="a"><b>A.</b> 토익이나 자격증보다 <b>"회사"가 아니라 "직무"를 먼저 정하세요.</b> 공채 시대의 '공통 스펙'은 수시채용에서 변별력이 거의 없습니다. 순서는 ① Job Title 결정(데이터 분석가 · HR · 마케터 등 하나로 명확히) ② 그 직무의 채용공고 10개를 모아 공통 자격요건 추출 ③ 요건 대비 나에게 부족한 것 리스트업 — 이것이 To-Do ④ 그 직무를 잘 키워줄 회사를 규모 불문 후보군으로 정리. 반대로 "삼성 · 네이버 · 카카오 가고 싶다"처럼 회사만 정하면 회사마다 뽑는 직무가 달라 준비가 분산되고, 면접에서 "왜 이 직무인가"에 답하지 못합니다. 채용담당자는 그 공백을 가장 먼저 알아봅니다.</div>
-      </div>
-
-      <div class="qa-item" data-cat="linkedin">
-        <div class="meta"><span class="badge gray">링크드인</span><span>취준생 · 이직</span></div>
-        <h3>Q. 신입인데 링크드인이 정말 필요한가요?</h3>
-        <div class="a"><b>A.</b> 네. 지금 기업 채용의 큰 축은 <b>다이렉트 소싱</b>(채용담당자가 직접 후보자를 찾는 것)입니다. 인터엑스도 서치펌 의존을 줄이고 다이렉트 소싱 비중을 80% 이상으로 올렸습니다. 채용담당자는 직무 키워드로 검색하고 헤드라인·About을 보고 클릭합니다. 헤드라인에 "취준생" 대신 지원 직무와 핵심 스킬을 쓰고, 프로젝트·인턴 경험을 경력란에 성과 중심으로 적어두면 신입도 연락이 옵니다.</div>
-      </div>
-
-      <div class="qa-item" data-cat="interview">
-        <div class="meta"><span class="badge gray">면접</span><span>취준생 · 이직</span></div>
-        <h3>Q. 면접에서 1분 자기소개는 어떻게 해야 하나요?</h3>
-        <div class="a"><b>A.</b> 자기소개는 '나를 설명하는 시간'이 아니라 <b>"이 포지션에 내가 맞는 이유를 3가지로 예고하는 시간"</b>입니다. 구조는 ① 지원 직무와 연결되는 한 줄 정체성 ② 공고의 핵심 요건에 대응하는 경험 2~3개를 숫자와 함께 ③ 이 회사·포지션에서 하고 싶은 것. 면접관은 자기소개에서 꺼낸 키워드로 다음 질문을 던지니, 내가 준비된 경험으로 유도하는 것이 핵심입니다.</div>
-      </div>
-
-      <div class="qa-item" data-cat="interview">
-        <div class="meta"><span class="badge gray">면접</span><span>역량 면접</span></div>
-        <h3>Q. 역량 기반 면접은 어떻게 준비하나요?</h3>
-        <div class="a"><b>A.</b> 면접관은 "과거에 어떻게 행동했는가"로 미래를 예측합니다. 내 경험을 <b>상황(S) – 과제(T) – 행동(A) – 결과(R)</b>로 정리한 카드 5~7장이면 대부분의 질문을 덮을 수 있습니다. 중요한 건 '행동'과 '결과'의 비중입니다. 상황 설명이 길어지면 떨어집니다. 결과는 가능한 숫자로, 숫자가 없으면 전후 비교로 말하세요.</div>
-      </div>
-
-      <div class="qa-item" data-cat="job">
-        <div class="meta"><span class="badge gray">이직</span><span>헤드헌터</span></div>
-        <h3>Q. 헤드헌터 연락이 왔는데, 어떻게 대해야 하나요?</h3>
-        <div class="a"><b>A.</b> 헤드헌터는 '나를 파는 사람'이 아니라 <b>기업의 의뢰를 채우는 사람</b>입니다. 그래서 내 조건보다 그 포지션 요건에 맞는지를 봅니다. 당장 이직 생각이 없어도 정중하게 연결을 유지하고, 내 희망 직무·연봉·근무지를 명확히 알려두세요. 좋은 헤드헌터는 1~2년 뒤 딱 맞는 포지션을 들고 다시 옵니다. 단, 이력서를 동의 없이 여러 회사에 뿌리는 헤드헌터는 거르세요.</div>
-      </div>
-
-      <div class="qa-item" data-cat="job">
-        <div class="meta"><span class="badge gray">연봉</span><span>이직</span></div>
-        <h3>Q. 연봉협상, 얼마를 불러야 하나요?</h3>
-        <div class="a"><b>A.</b> 원칙 세 가지. ① 숫자를 먼저 말하지 말고 <b>현재 연봉(원천징수 기준)과 희망 범위</b>를 물어볼 때 답하세요. ② 희망은 '범위'로, 하한은 내가 실제로 받아들일 수 있는 숫자여야 합니다. ③ 기본급 외에 사이닝 보너스, 성과급, 스톡옵션, 직급을 같이 테이블에 올리세요. 채용담당자도 오퍼 수락률이 KPI라 합리적인 요구는 들어줄 여지가 큽니다. 오퍼 레터 받기 전 구두 합의 내용은 반드시 메일로 남기세요.</div>
-      </div>
-
-      <div class="qa-item" data-cat="job">
-        <div class="meta"><span class="badge gray">이직</span><span>평판조회</span></div>
-        <h3>Q. 평판조회(레퍼런스 체크)는 정말 하나요? 뭘 물어보나요?</h3>
-        <div class="a"><b>A.</b> 경력직은 대부분 합니다. 묻는 건 주로 ① 함께 일한 기간과 역할이 이력서와 맞는지 ② 강점과 보완점 ③ 다시 같이 일하고 싶은지. 그래서 이직 사유를 전 직장 욕으로 만들면 안 됩니다. 평판은 퇴사하는 날이 아니라 재직 중에 만들어집니다. 레퍼런스로 세울 상사·동료 2~3명을 미리 정하고 양해를 구해두세요.</div>
-      </div>
-
-      <div class="qa-item" data-cat="foreign">
-        <div class="meta"><span class="badge gray">외국계</span><span>영문 서류</span></div>
-        <h3>Q. 외국계 기업은 영어를 얼마나 잘해야 하나요?</h3>
-        <div class="a"><b>A.</b> 포지션마다 다릅니다. 공고의 Job Description에 "fluent", "business level", "preferred" 중 어떤 표현이 쓰였는지 보세요. 대부분의 국내 외국계 포지션은 '영어로 메일 쓰고 글로벌 미팅에서 내 업무를 설명할 수 있는 수준'이면 됩니다. 영어 인터뷰는 자기소개와 핵심 경험 3개를 영어 STAR로 미리 써서 소리 내어 연습하는 것만으로도 체감 난이도가 크게 내려갑니다.</div>
-      </div>
-
-      <div class="qa-item" data-cat="prep">
-        <div class="meta"><span class="badge gray">취업 준비</span><span>대학원 · 자격증</span></div>
-        <h3>Q. 취업이 안 돼서 대학원을 갈까 고민입니다.</h3>
-        <div class="a"><b>A.</b> "취업이 안 돼서"가 이유라면 말리고 싶습니다. 석사는 <b>연구·전문직 트랙</b>(R&amp;D, 데이터, 특정 전문직)에서 요건이 될 때 가치가 있고, 그 외 직무에서는 2년 늦은 신입이 됩니다. 지원 직무의 채용공고 20개를 모아 '석사 우대'가 몇 개인지 세어보세요. 절반 미만이면 대학원 대신 인턴·계약직으로 실무 경험을 만드는 게 훨씬 빠릅니다.</div>
-      </div>
-
-      <div class="qa-item" data-cat="docs">
-        <div class="meta"><span class="badge gray">서류</span><span>영문 이력서</span></div>
-        <h3>Q. 영문 Resume는 국문 이력서를 번역하면 되나요?</h3>
-        <div class="a"><b>A.</b> 아니요. 구조가 다릅니다. 영문 Resume는 1페이지, 사진·생년월일·가족사항 없음, 가장 위에 Summary 3줄, 경력은 <b>동사로 시작하는 성과 불릿</b>("Reduced … by 30%"), 학력은 아래. 한국식 '담당 업무 나열'을 그대로 번역하면 외국계 채용담당자에게는 아무 것도 한 게 없는 사람으로 읽힙니다.</div>
-      </div>
-
-      <div class="qa-item" data-cat="prep">
-        <div class="meta"><span class="badge gray">취업 준비</span><span>첫 직장</span></div>
-        <h3>Q. 대기업 준비와 스타트업 · 외국계 지원을 병행해도 되나요?</h3>
-        <div class="a"><b>A.</b> 대기업 · 스타트업 · 외국계는 "직무"가 같다면 병행할 수 있습니다. 준비의 중심이 직무 경쟁력(실무 경험 · 영어 회화 · AI 활용)이기 때문입니다. 다만 <b>대기업만 바라보고 2~3년을 소진하는 것이 가장 위험합니다.</b> 대기업은 "목표"가 아니라 여러 선택지 중 하나로 두세요. 반대로 <b>공기업은 병행이 아니라 선택</b>입니다. NCS 트랙과 직무 트랙은 준비 방식이 달라 어중간한 병행은 둘 다 놓치기 쉽습니다. 6개월 안에 방향을 정하세요.</div>
-      </div>
-
-      <div class="qa-item" data-cat="prep">
-        <div class="meta"><span class="badge gray">취업 준비</span><span>경력 없음</span></div>
-        <h3>Q. 인턴마저 경력을 보고 뽑는 시기에, 아무 경력이 없는 지원자에게도 길이 있을까요?</h3>
-        <div class="a"><b>A.</b> 있습니다. 채용 현장에서 검증된 3단계 우회 전략입니다. ① 진입장벽 낮은 곳부터 — 직무 · 기업의 눈높이를 전략적으로 낮춰 인턴 · 계약직 · 파견직으로 우선 진입 ② 2년, 실무 레퍼런스 — 지원 직무와 연결된 실무 경험을 2년 축적 ③ 원하는 곳으로 이직 — 쌓은 경험을 무기로 목표 직무 · 기업으로 전략적 이직. <b>경력 채용 담당자는 "정규직이었는가"보다 "무슨 일을 해봤는가"를 봅니다.</b> 외국계 · 대기업의 상당수 정규직이 실제로 이 경로로 채워집니다.</div>
-      </div>
-
-      <div class="qa-item" data-cat="prep">
-        <div class="meta"><span class="badge gray">취업 준비</span><span>계약직</span></div>
-        <h3>Q. 신입은 계약직으로 들어가도 괜찮을까요?</h3>
-        <div class="a"><b>A.</b> 지원 직무와 연결된 일이라면 괜찮습니다. 백지 상태로 정규직 공고만 기다린 2년과, 계약직으로라도 실무를 채운 2년 — 이력서의 무게는 완전히 다릅니다. 특히 외국계는 공채가 없어 <b>인턴 · 계약직 → 정규직 전환이 왕도</b>입니다. GE에서 뽑은 신입 대부분이 이 경로였습니다. 단, 직무와 무관한 단순 업무 계약직은 경력으로 인정받기 어려우니 "무슨 일을 하게 되는가"를 꼭 확인하세요.</div>
-      </div>
-
-      <div class="qa-item" data-cat="prep">
-        <div class="meta"><span class="badge gray">취업 준비</span><span>AI 시대</span></div>
-        <h3>Q. AI 때문에 신입 채용이 줄어든다는데, 진짜인가요?</h3>
-        <div class="a"><b>A.</b> '단순 반복 업무를 할 신입'은 줄고, <b>'AI를 써서 시니어와 짝을 이룰 신입'</b>은 늘고 있습니다. 인터엑스는 AI 전문 신입·인턴과 시니어 직무 전문가를 짝짓는 하이브리드 구조로 인턴을 뽑고, 입사 4개월 차 인턴이 AI 채용 시스템 구축을 주도한 사례도 있습니다. 지원 직무에서 생성형 AI로 무엇을 자동화·개선해 봤는지 한 가지 사례를 만들어 두세요. 2026년 채용에서 가장 확실한 차별점입니다.</div>
-      </div>
-
-      </div>
-      <p class="muted small mt-32">※ 답변은 일반적인 채용 현장 기준이며, 회사·직무·개인 상황에 따라 다를 수 있습니다. 더 깊은 내용은 『취업핸드북』 Part 3·4와 공개 코칭에서 다룹니다. <a href="q/index.html" style="color:var(--accent)">전체 답변 목록 →</a></p>
+      <p class="muted small mt-32">※ 답변은 일반적인 채용 현장 기준이며, 회사 · 직무 · 개인 상황에 따라 다를 수 있습니다. 댓글은 닉네임만으로 남길 수 있고, 신고가 누적되면 자동으로 숨겨집니다. 개인정보가 담긴 내용은 비공개 질문으로 보내주세요. <a href="q/index.html" style="color:var(--accent)">답변 전체 목록 →</a></p>
     </div>
 
     <aside class="qa-side">
-      <div class="card">
+      <div class="card" id="ask">
         <h3>무엇이든 물어보세요. 다 답합니다.</h3>
         <p class="small muted" style="margin-bottom:14px">현직이라 낮에는 늦을 수 있지만 빠짐없이 답합니다. 비밀은 지킵니다.</p>
         <form class="form question-form" id="question-form">
-          <div>
-            <label for="q-status">현재 상황</label>
-            <select id="q-status" name="status">
-              <option>재학생</option><option>졸업 후 취준 중</option><option>1~5년차 이직 준비</option><option>5년차 이상</option><option>기타</option>
-            </select>
+          <div class="two">
+            <div>
+              <label for="q-board">말머리</label>
+              <select id="q-board" name="board">
+                <option value="prep">취준</option><option value="job">이직</option><option value="review">후기</option><option value="talk">고민</option>
+              </select>
+            </div>
+            <div>
+              <label for="q-status">현재 상황</label>
+              <select id="q-status" name="status">
+                <option>재학생</option><option>졸업 후 취준 중</option><option>교육과정 수료 예정</option><option>이직 준비 중</option><option>재직 중</option><option>기타</option>
+              </select>
+            </div>
           </div>
           <div>
             <label for="q-topic">분야</label>
@@ -173,22 +97,28 @@
             </select>
           </div>
           <div>
-            <label for="q-nick">닉네임 (선택, 공개 시 표시)</label>
-            <input id="q-nick" name="nickname" placeholder="예: 취준 3개월차" />
+            <label for="q-nick">닉네임 (선택)</label>
+            <input id="q-nick" name="nickname" placeholder="예: 취준 3개월차" maxlength="20" />
           </div>
           <div>
-            <label for="q-text">질문</label>
-            <textarea id="q-text" name="question" placeholder="상황을 2~3줄로 적고, 가장 궁금한 것 하나를 질문해 주세요." required></textarea>
+            <label for="q-text">질문 · 고민 · 후기</label>
+            <textarea id="q-text" name="question" placeholder="상황을 2~3줄로 적고, 가장 궁금한 것 하나를 질문해 주세요. 이름과 연락처는 쓰지 마세요." required minlength="5" maxlength="2000"></textarea>
           </div>
           <div class="vis-row">
-            <label class="vis-opt"><input type="radio" name="visibility" value="public" checked /><span><b>공개로 답변</b><small>이름 없이 이 페이지에 공개됩니다.</small></span></label>
-            <label class="vis-opt"><input type="radio" name="visibility" value="private" /><span><b>비공개로 답변</b><small>이메일로만 답합니다.</small></span></label>
+            <label class="vis-opt"><input type="radio" name="visibility" value="public" checked /><span><b>공개</b><small>라운지에 바로 올라가고 누구나 댓글을 달 수 있습니다.</small></span></label>
+            <label class="vis-opt"><input type="radio" name="visibility" value="private" /><span><b>비공개</b><small>이메일로만 답합니다. 어디에도 공개하지 않습니다.</small></span></label>
+          </div>
+          <div class="poll-wrap">
+            <label class="check-row"><input type="checkbox" name="as_poll" /> 투표로 올리기 (선택지 2~4개)</label>
+            <div class="poll-fields" hidden>
+              <input name="opt" placeholder="선택지 1" maxlength="40" /><input name="opt" placeholder="선택지 2" maxlength="40" /><input name="opt" placeholder="선택지 3 (선택)" maxlength="40" /><input name="opt" placeholder="선택지 4 (선택)" maxlength="40" />
+            </div>
           </div>
           <div class="vis-email" hidden>
-            <label for="q-email">답변 받을 이메일</label>
+            <label for="q-email">댓글 · 답변 알림 받을 이메일 (선택)</label>
             <input id="q-email" name="email" type="email" placeholder="example@email.com" />
           </div>
-          <button class="btn btn-primary" type="submit">질문 보내기</button>
+          <button class="btn btn-primary" type="submit">올리기</button>
           <p class="hint form-note">보통 24시간 안에 답합니다. 바쁜 날은 조금 늦어도 반드시 답합니다.</p>
         </form>
       </div>
@@ -204,16 +134,16 @@
 
 <footer class="footer">
   <div class="wrap">
-    <div><h4>취업핸드북 · 서재민</h4><p>현직 채용리더가 전수하는 취업준비 A to Z, 하루에 끝내기.</p></div>
-    <div><h4>바로가기</h4><ul><li><a href="index.html#curriculum">커리큘럼</a></li><li><a href="apply.html">특강 신청</a> · <a href="contact.html">문의</a></li><li><a href="insight.html">인사이트 &amp; 취업뉴스</a></li><li><a href="privacy.html">개인정보처리방침</a></li></ul></div>
+    <div><h4>취업핸드북 · 서재민</h4><p>취업 · 이직, 무엇이든 물어보세요.</p></div>
+    <div><h4>바로가기</h4><ul><li><a href="index.html#curriculum">커리큘럼</a></li><li><a href="apply.html">공개 코칭 신청</a> · <a href="contact.html">문의</a></li><li><a href="insight.html">인사이트</a></li><li><a href="privacy.html">개인정보처리방침</a></li></ul></div>
     <div><h4>채널</h4><ul><li><a data-href="youtube" target="_blank" rel="noopener">YouTube</a></li><li><a data-href="threads" target="_blank" rel="noopener">Threads</a></li><li><a data-href="instagram" target="_blank" rel="noopener">Instagram</a></li><li><a data-href="kakaoUrl" target="_blank" rel="noopener">오픈카톡방</a></li></ul></div>
-    <div class="copy">© 2026 서재민. 본 사이트의 특강은 개인 자격으로 운영되며 소속 회사와 무관합니다.</div>
+    <div class="copy">© 2026 서재민. 본 사이트의 코칭 · 특강은 개인 자격으로 운영되며 소속 회사와 무관합니다.</div>
   </div>
 </footer>
 
 <div class="float-cta">
-  <a class="btn btn-primary" href="apply.html">특강 신청</a>
-  <a class="btn btn-ghost" href="contact.html">문의</a>
+  <a class="btn btn-primary" href="#question-form">질문 남기기</a>
+  <a class="btn btn-ghost" href="apply.html">공개 코칭 신청</a>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.min.js"></script>
 <script src="js/config.js"></script>

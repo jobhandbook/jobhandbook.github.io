@@ -10,12 +10,13 @@ const URL_ = (cfg.match(/SUPABASE_URL:\s*"([^"]+)"/) || [])[1];
 const KEY = (cfg.match(/SUPABASE_ANON_KEY:\s*"([^"]+)"/) || [])[1];
 if (!URL_ || !KEY) { console.log("Supabase 설정 없음 — 건너뜀"); process.exit(0); }
 
+const BOARDS = { prep: "취준", job: "이직", review: "후기", talk: "고민" };
 const CATS = { prep: "취업 준비", docs: "서류", linkedin: "링크드인", interview: "면접", job: "이직 · 연봉", foreign: "외국계", etc: "기타" };
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const fmt = (iso) => { const d = new Date(iso); return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`; };
 const slugify = (q, id) => id + "-" + q.replace(/[^\p{L}\p{N}\s]/gu, "").trim().replace(/\s+/g, "-").slice(0, 40);
 
-const res = await fetch(`${URL_}/rest/v1/questions?status=eq.published&is_private=eq.false&select=id,question,answer,category,situation,answered_at,created_at&order=answered_at.desc`, {
+const res = await fetch(`${URL_}/rest/v1/questions_public?status=eq.published&kind=eq.question&answer=not.is.null&select=id,question,answer,category,situation,board,comment_count,answered_at,created_at&order=answered_at.desc`, {
   headers: { apikey: KEY, Authorization: `Bearer ${KEY}` },
 });
 if (!res.ok) { console.error("fetch failed", res.status, await res.text()); process.exit(1); }
@@ -39,6 +40,9 @@ const footer = `
   <div class="copy">© 2026 서재민. 본 사이트의 코칭 · 특강은 개인 자격으로 운영되며 소속 회사와 무관합니다.</div>
 </div></footer>
 <div class="float-cta"><a class="btn btn-kakao" href="https://open.kakao.com/o/gPZQAPlg" target="_blank" rel="noopener">질문하기</a><a class="btn btn-primary" href="../apply.html">공개 코칭 신청</a></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.min.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/db.js"></script>
 <script src="../js/main.js"></script>`;
 
 const head = (title, desc, canonical, extra = "") => `<!doctype html>
@@ -50,6 +54,7 @@ const head = (title, desc, canonical, extra = "") => `<!doctype html>
 <meta property="og:title" content="${esc(title)}" /><meta property="og:description" content="${esc(desc)}" /><meta property="og:url" content="${canonical}" /><meta property="og:type" content="article" /><meta property="og:image" content="${SITE}/img/profile-slide.png" />
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="../css/style.css" />
+<link rel="stylesheet" href="../css/lounge.css" />
 ${extra}
 </head><body>`;
 
@@ -70,18 +75,19 @@ for (const r of rows) {
   const html = `${head(title, desc, url, ld)}
 ${nav}
 <section class="page-hero"><div class="wrap">
-  <span class="eyebrow">취업 · 이직 Q&A · ${esc(CATS[r.category] || "기타")}${r.situation ? " · " + esc(r.situation) : ""}</span>
+  <span class="eyebrow">취업 · 이직 라운지 · ${esc(BOARDS[r.board] || "취준")} · ${esc(CATS[r.category] || "기타")}${r.situation ? " · " + esc(r.situation) : ""}</span>
   <h1 style="font-size:clamp(24px,3.2vw,34px)">Q. ${esc(r.question)}</h1>
   <p class="small muted" style="margin-top:8px">${fmt(r.answered_at || r.created_at)} · 답변 서재민 (채용 실무 18년 · 1,000명 이상 직접 채용)</p>
 </div></section>
 <section class="section"><div class="wrap qa-layout">
   <article>
     <div class="qa-item" style="border:0;padding-top:0"><div class="a" style="font-size:16.5px;line-height:1.8"><b>A.</b> ${esc(r.answer).replace(/\n/g, "<br/>")}</div></div>
+    <div class="comments-mount" data-ctype="question" data-cid="${r.id}" data-count="${r.comment_count || 0}"></div>
     <div class="night-note" style="margin-top:28px">내 서류와 면접을 직접 봐야 하는 문제라면 <a href="../coaching.html" style="color:var(--accent)">1:1 코칭</a>, 기준부터 세우려면 <a href="../apply.html" style="color:var(--accent)">공개 코칭</a>.</div>
     ${related.length ? `<h3 style="margin-top:36px;font-size:18px">같은 주제의 다른 질문</h3><ul class="press">${related.map((x) => `<li><span class="date">${fmt(x.answered_at || x.created_at)}</span><span><a href="${encodeURI(slugify(x.question, x.id))}.html"><b>Q. ${esc(x.question)}</b></a></span><span></span></li>`).join("")}</ul>` : ""}
   </article>
   <aside class="qa-side">
-    <div class="card"><h3>나도 물어보기</h3><p>무료입니다. 현직이라 낮에는 늦을 수 있지만 빠짐없이 답합니다. 비공개 가능.</p><a class="btn btn-primary" style="margin-top:12px;width:100%" href="../qna.html#question-form">질문 남기기</a><a class="btn btn-kakao" style="margin-top:8px;width:100%" href="https://open.kakao.com/o/gPZQAPlg" target="_blank" rel="noopener">오픈카톡으로 바로</a></div>
+    <div class="card"><h3>나도 물어보기</h3><p>무료입니다. 현직이라 낮에는 늦을 수 있지만 빠짐없이 답합니다. 비공개 가능.</p><a class="btn btn-primary" style="margin-top:12px;width:100%" href="../qna.html#q-${r.id}">라운지에서 이 질문 보기</a><a class="btn btn-ghost" style="margin-top:8px;width:100%" href="../qna.html#question-form">나도 질문 남기기</a><a class="btn btn-kakao" style="margin-top:8px;width:100%" href="https://open.kakao.com/o/gPZQAPlg" target="_blank" rel="noopener">오픈카톡으로 바로</a></div>
     <div class="card"><h3>전체 답변 보기</h3><p>지금까지 공개된 질문과 답변 ${rows.length}개.</p><a class="btn btn-ghost" style="margin-top:12px;width:100%" href="index.html">목록으로</a></div>
   </aside>
 </div></section>

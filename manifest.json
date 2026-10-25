@@ -1,0 +1,20 @@
+{
+  "name": "취업핸드북 관리자",
+  "short_name": "취업핸드북",
+  "description": "서재민 취업핸드북 사이트 관리자. 안드로이드에서 홈 화면에 추가하면 LinkedIn 앱의 공유 메뉴에 나타나고, 글 주소가 관리자 페이지로 바로 넘어옵니다.",
+  "start_url": "/admin.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "lang": "ko",
+  "icons": [
+    { "src": "/img/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/img/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "share_target": {
+    "action": "/admin.html",
+    "method": "GET",
+    "params": { "title": "title", "text": "text", "url": "url" }
+  }
+}

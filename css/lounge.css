@@ -1,0 +1,115 @@
+/* ==========================================================
+   라운지 (Q&A 댓글 · 투표 · 말머리) + 인사이트 LinkedIn 임베드
+   style.css 다음에 로드. 색은 :root 토큰 사용.
+   ========================================================== */
+
+/* 말머리 배지 */
+.badge.board-prep { background: rgba(249,115,22,.14); color: var(--accent-2); border-color: rgba(249,115,22,.35); }
+.badge.board-job { background: rgba(96,165,250,.14); color: #93c5fd; border-color: rgba(96,165,250,.35); }
+.badge.board-review { background: rgba(74,222,128,.12); color: var(--green); border-color: rgba(74,222,128,.3); }
+.badge.board-talk { background: rgba(192,132,252,.14); color: #d8b4fe; border-color: rgba(192,132,252,.35); }
+.badge.weekly-badge { background: var(--accent); color: #fff; border-color: var(--accent); }
+.badge.li-badge { background: #0a66c2; color: #fff; border-color: #0a66c2; display: inline-flex; align-items: center; gap: 5px; }
+.badge.li-badge .li-ico { width: 12px; height: 12px; margin: 0; fill: #fff; }
+.badge-admin { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 800; letter-spacing: .04em; padding: 3px 8px; border-radius: 6px; background: var(--accent); color: #fff; vertical-align: middle; }
+.badge-admin::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #fff; opacity: .9; }
+
+/* 필터 줄 */
+.lounge-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin: 22px 0 6px; }
+.lounge-bar .qa-filter { margin: 0; }
+.sort-filter { display: flex; gap: 4px; }
+.sort-filter button { background: none; border: 0; color: var(--ink-3); font-weight: 700; font-size: 13px; padding: 6px 8px; border-radius: 6px; }
+.sort-filter button.active { color: var(--accent); background: var(--accent-soft); }
+.lounge-intro { font-size: 14px; color: var(--ink-3); margin-top: 4px; }
+.lounge-intro b { color: var(--ink-2); }
+
+/* 글 */
+.lounge-item { padding: 24px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 90px; }
+.lounge-item .meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 12.5px; color: var(--ink-3); margin-bottom: 10px; }
+.lounge-item h3 { font-size: 17.5px; font-weight: 800; line-height: 1.5; }
+.lounge-item .st { font-size: 11.5px; font-weight: 800; letter-spacing: .02em; padding: 2px 8px; border-radius: 6px; }
+.lounge-item .st.ok { color: var(--green); background: rgba(74,222,128,.1); }
+.lounge-item .st.wait { color: var(--accent-2); background: var(--accent-soft); }
+.lounge-item .a { margin-top: 14px; padding: 14px 16px; border-left: 3px solid var(--accent); background: var(--card); border-radius: 0 10px 10px 0; color: var(--ink-2); font-size: 15px; line-height: 1.75; }
+.lounge-item .a .badge-admin { margin-bottom: 8px; }
+.lounge-item .a > div { margin-top: 6px; }
+.lounge-item.weekly { padding: 22px 20px; margin: 10px 0 16px; border: 1px solid var(--accent); border-radius: var(--radius-s); background: linear-gradient(180deg, rgba(249,115,22,.08), transparent); }
+.lounge-item.weekly h3 { font-size: 20px; }
+.lounge-item.pinned:not(.weekly) { border-left: 3px solid var(--accent); padding-left: 14px; }
+.lounge-item.hl, .post.hl { animation: hl 2.4s ease-out; }
+@keyframes hl { 0% { background: var(--accent-soft); } 100% { background: transparent; } }
+.qa-item.link { display: block; color: inherit; }
+.qa-item.link:hover h3 { color: var(--accent-2); }
+
+/* 투표 */
+.poll { display: grid; gap: 8px; margin-top: 14px; }
+.poll-opt { position: relative; overflow: hidden; display: flex; justify-content: space-between; align-items: center; gap: 10px; width: 100%; text-align: left; padding: 12px 14px; border: 1px solid var(--line-2); border-radius: 10px; background: var(--card); color: var(--ink); font-weight: 700; font-size: 14.5px; cursor: pointer; transition: border-color .15s; }
+.poll-opt:hover { border-color: var(--accent); }
+.poll-opt.mine { border-color: var(--accent); }
+.poll-bar { position: absolute; left: 0; top: 0; bottom: 0; background: var(--accent-soft); transition: width .5s ease; }
+.poll-opt.mine .poll-bar { background: rgba(249,115,22,.28); }
+.poll-label, .poll-pct { position: relative; }
+.poll-pct { font-size: 13px; color: var(--ink-2); white-space: nowrap; }
+.poll-total { margin-top: 2px; }
+
+/* 댓글 */
+.cbox { margin-top: 14px; }
+.cbox-toggle { background: none; border: 0; color: var(--ink-3); font-weight: 700; font-size: 13.5px; padding: 6px 0; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+.cbox-toggle b { color: var(--ink); }
+.cbox-toggle:hover { color: var(--accent-2); }
+.cbox-toggle .chev { font-size: 11px; transition: transform .15s; }
+.cbox-toggle[aria-expanded="true"] .chev { transform: rotate(180deg); }
+.cbox-body { margin-top: 8px; padding: 14px 16px; background: var(--bg-2); border: 1px solid var(--line); border-radius: 10px; }
+.cmt-list { display: grid; gap: 12px; }
+.cmt { padding: 10px 12px; border-radius: 8px; background: var(--card); border: 1px solid var(--line); }
+.cmt.admin { border-color: rgba(249,115,22,.45); background: rgba(249,115,22,.06); }
+.cmt-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink-3); margin-bottom: 6px; }
+.cmt-head b { color: var(--ink); font-size: 13.5px; }
+.cmt-actions { margin-left: auto; display: flex; gap: 2px; }
+.cmt-actions button { background: none; border: 0; color: var(--ink-3); font-size: 11.5px; padding: 2px 6px; cursor: pointer; border-radius: 4px; }
+.cmt-actions button:hover { color: var(--ink); background: var(--line); }
+.cmt-actions button:disabled { opacity: .5; cursor: default; }
+.cmt p { color: var(--ink-2); font-size: 14.5px; line-height: 1.7; }
+.cmt-empty { padding: 4px 0; }
+.cform { margin-top: 14px; display: grid; gap: 8px; }
+.cform textarea { width: 100%; min-height: 76px; resize: vertical; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--line-2); background: var(--bg); color: var(--ink); font: inherit; font-size: 14px; }
+.cform textarea:focus, .cform input:focus { outline: none; border-color: var(--accent); }
+.cform-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; align-items: center; }
+.cform input { padding: 9px 11px; border-radius: 8px; border: 1px solid var(--line-2); background: var(--bg); color: var(--ink); font: inherit; font-size: 13.5px; min-width: 0; }
+.cform.admin .cform-row { grid-template-columns: 1fr auto; }
+.cform-note { font-size: 12px; color: var(--ink-3); }
+@media (max-width: 560px) { .cform-row { grid-template-columns: 1fr 1fr; } .cform-row button { grid-column: 1 / -1; } .cform.admin .cform-row { grid-template-columns: 1fr; } }
+
+/* 질문 폼 추가 필드 */
+.poll-wrap { display: grid; gap: 8px; }
+.poll-wrap .check-row { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--ink-2); }
+.poll-wrap .check-row input { width: auto; accent-color: var(--accent); }
+.poll-fields { display: grid; gap: 6px; }
+.poll-fields input { font-size: 13.5px; }
+
+/* 인사이트: LinkedIn 임베드 + 필터 */
+.kind-filter { margin: 0 0 14px; }
+.li-embed { border-radius: 10px; overflow: hidden; border: 1px solid var(--line); background: #fff; max-width: 560px; }
+.li-embed iframe { display: block; width: 100%; border: 0; }
+.post.li-post h3 { font-size: 17px; }
+
+/* 메인 최근 글 */
+.recent-posts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 18px; }
+.recent-post { display: grid; gap: 8px; padding: 18px 20px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-s); color: inherit; transition: .15s; align-content: start; }
+.recent-post:hover { border-color: var(--accent); transform: translateY(-2px); }
+.recent-post .badge { justify-self: start; }
+.recent-post b { color: var(--ink); font-size: 15px; line-height: 1.5; }
+@media (max-width: 860px) { .recent-posts { grid-template-columns: 1fr; } }
+
+/* 관리자: 댓글 관리 */
+.admin-cmt { display: grid; gap: 6px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); }
+.admin-cmt.hidden-cmt { opacity: .6; border-style: dashed; }
+.admin-cmt .meta { font-size: 12px; color: var(--ink-3); display: flex; gap: 10px; flex-wrap: wrap; }
+.admin-cmt p { font-size: 14px; color: var(--ink-2); white-space: pre-wrap; }
+.admin-reply { margin-top: 10px; display: grid; gap: 8px; }
+.admin-reply textarea { min-height: 70px; }
+.li-preview { margin-top: 8px; }
+
+/* 메인 질문 폼: 말머리 · 상황 · 분야 3열 */
+.form .two.three { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 560px) { .form .two.three { grid-template-columns: 1fr; } }

@@ -15,6 +15,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/lounge.css" />
 </head>
 <body>
 
@@ -38,14 +39,17 @@
   <div class="wrap">
     <span class="eyebrow">취업준비 · 이직준비 인사이트</span>
     <h1>인사이트 &amp; 취업뉴스</h1>
-    <p>채용 현장에서 보이는 것들을 씁니다. 그리고 매일 하나, 취준생이 꼭 알아야 할 취업 뉴스를 골라 짧은 코멘트와 함께 올립니다.</p>
+    <p>채용 현장에서 보이는 것들을 씁니다.<br/>LinkedIn에 올린 글도 여기에 모읍니다. 댓글은 어디서든 환영합니다.</p>
   </div>
 </section>
 
 <section class="section">
   <div class="wrap qa-layout">
     <div>
-      <h2 class="h2" style="font-size:24px">서재민의 인사이트</h2>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px"><h2 class="h2" style="font-size:24px;margin:0">서재민의 인사이트</h2></div>
+      <div class="qa-filter kind-filter" role="tablist" aria-label="글 종류" hidden>
+        <button class="active" data-kind="all">전체</button><button data-kind="article">인사이트</button><button data-kind="linkedin">LinkedIn</button>
+      </div>
       <div id="posts-dynamic"></div>
       <div id="posts-static">
       <p class="muted small">※ 아래 글은 공개된 강연·기고 내용을 바탕으로 한 초안 목록입니다. 본문은 추후 작성해 올립니다.</p>

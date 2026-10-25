@@ -37,6 +37,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/lounge.css" />
 </head>
 <body>
 
@@ -112,7 +113,11 @@
     </div>
     <aside class="hero-card hero-ask reveal" aria-label="질문 남기기">
       <form class="form question-form" id="question-form">
-        <div class="two">
+        <div class="two three">
+          <div>
+            <label for="h-board">말머리</label>
+            <select id="h-board" name="board"><option value="prep">취준</option><option value="job">이직</option><option value="review">후기</option><option value="talk">고민</option></select>
+          </div>
           <div>
             <label for="h-status">현재 상황</label>
             <select id="h-status" name="status">
@@ -132,11 +137,11 @@
         </div>
         <input type="hidden" name="nickname" value="" />
         <div class="vis-row">
-          <label class="vis-opt"><input type="radio" name="visibility" value="public" checked /><span><b>공개로 답변</b><small>이름 없이 Q&A에 공개. 같은 고민을 가진 사람도 봅니다.</small></span></label>
+          <label class="vis-opt"><input type="radio" name="visibility" value="public" checked /><span><b>공개로 답변</b><small>라운지에 바로 올라가고, 누구나 댓글을 달 수 있습니다.</small></span></label>
           <label class="vis-opt"><input type="radio" name="visibility" value="private" /><span><b>비공개로 답변</b><small>이메일로만 답합니다. 어디에도 공개하지 않습니다.</small></span></label>
         </div>
         <div class="vis-email" hidden>
-          <label for="h-email">답변 받을 이메일</label>
+          <label for="h-email">댓글 · 답변 알림 받을 이메일 (선택)</label>
           <input id="h-email" name="email" type="email" placeholder="example@email.com" />
         </div>
         <button class="btn btn-primary" type="submit" style="width:100%">보내기</button>
@@ -219,6 +224,20 @@
         <div class="a"><b>A.</b> 네. 공고가 뜨기 전에 채용담당자는 이미 링크드인에서 후보자를 찾고 있습니다. 헤드라인에 "취준생" 대신 지원 직무와 핵심 스킬을 쓰고, 프로젝트 · 인턴 경험을 성과 중심으로 적어두면 신입도 연락이 옵니다. 프로필을 만들었다면 저에게 1촌 신청을 보내보세요. 첫 콜드 아웃리치 상대가 되어 드리겠습니다.</div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ============ RECENT POSTS (인사이트 · LinkedIn) ============ -->
+<section class="section alt" data-posts-recent hidden>
+  <div class="wrap">
+    <div class="reveal" style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap">
+      <div>
+        <span class="eyebrow">INSIGHT · LINKEDIN</span>
+        <h2 class="h2" style="margin-bottom:0">최근 글</h2>
+      </div>
+      <a class="btn btn-ghost btn-sm" href="insight.html">인사이트 전체 →</a>
+    </div>
+    <div class="recent-posts" id="posts-recent"></div>
   </div>
 </section>
 

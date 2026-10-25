@@ -3,19 +3,23 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>관리자 | 취업핸드북 서재민</title>
 <meta name="robots" content="noindex, nofollow" />
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<meta name="theme-color" content="#0a0a0a" />
+<title>관리자 | 취업핸드북 서재민</title>
+<link rel="manifest" href="manifest.json" />
 <link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/lounge.css" />
 </head>
 <body>
 
 <header class="header">
   <div class="wrap">
     <a class="logo" href="index.html"><span class="logo-mark">J</span>취업핸드북 <span class="muted" style="font-weight:600">· 관리자</span></a>
-    <nav class="nav" style="display:flex;position:static;flex-direction:row;background:transparent;border:0;padding:0">
-      <a href="index.html" target="_blank" rel="noopener">사이트 보기 ↗</a>
-      <button class="btn btn-ghost btn-sm" id="logout-btn" style="display:none">로그아웃</button>
+    <nav class="nav" aria-label="관리자 메뉴">
+      <a href="index.html">사이트 보기</a>
+      <a href="qna.html">라운지</a>
+      <a href="insight.html">인사이트</a>
+      <button class="btn btn-ghost btn-sm" id="logout-btn" type="button" style="display:none">로그아웃</button>
     </nav>
   </div>
 </header>
@@ -26,16 +30,14 @@
   <section id="setup" style="display:none">
     <span class="eyebrow">SETUP</span>
     <h1 class="h2">관리자 모드를 켜려면 Supabase 연결이 필요합니다</h1>
-    <p class="lead" style="margin-bottom:20px">무료 플랜이면 충분합니다. 한 번만 설정하면 이 페이지에서 일정 · Q&A 답변 · 신청/문의 확인 · 글 관리를 직접 하실 수 있습니다.</p>
+    <p class="lead" style="margin-bottom:20px">무료 플랜이면 충분합니다. 한 번만 설정하면 이 페이지에서 일정 · 라운지 답변 · 댓글 · 신청/문의 · 글 관리를 직접 하실 수 있습니다.</p>
     <div class="admin-setup">
       <ol>
-        <li><a href="https://supabase.com" target="_blank" rel="noopener" style="color:var(--accent)">supabase.com</a>에서 가입 후 <b>New project</b> (이름 자유, Region은 Northeast Asia (Seoul) 권장, 비밀번호는 메모).</li>
-        <li>왼쪽 메뉴 <b>SQL Editor</b> → <b>New query</b> → 사이트 폴더의 <code>supabase/schema.sql</code> 내용을 전부 붙여넣고 <b>Run</b>.</li>
-        <li><b>Authentication → Users → Add user</b>에서 관리자 이메일 · 비밀번호를 만듭니다 (Auto Confirm 체크). 이 계정으로만 로그인됩니다.</li>
-        <li><b>Project Settings → API</b>에서 <code>Project URL</code>과 <code>anon public</code> 키를 복사해 <code>js/config.js</code>에 붙여넣습니다.</li>
-        <li>이 페이지를 새로고침하면 로그인 화면이 보입니다.</li>
+        <li><a href="https://supabase.com" target="_blank" rel="noopener" style="color:var(--accent)">supabase.com</a>에서 가입 후 <b>New project</b>.</li>
+        <li><b>SQL Editor</b>에서 <code>supabase/schema.sql</code> → <code>notify.sql</code> → <code>lounge.sql</code> 순서로 Run.</li>
+        <li><b>Authentication → Users → Add user</b>에서 관리자 이메일 · 비밀번호를 만듭니다.</li>
+        <li><b>Project Settings → API</b>의 URL과 publishable 키를 <code>js/config.js</code>에 넣습니다.</li>
       </ol>
-      <p class="small muted" style="margin-top:10px">anon 키는 공개되어도 괜찮은 키입니다(읽기 · 제출만 가능하도록 DB 규칙이 잠겨 있습니다). <b>service_role</b> 키는 절대 넣지 마세요.</p>
     </div>
   </section>
 
@@ -59,14 +61,78 @@
     <h1 class="h2" style="font-size:28px">사이트 관리</h1>
     <p class="muted small" id="whoami"></p>
     <div class="admin-tabs">
-      <button class="active" data-tab="schedule">특강 일정</button>
-      <button data-tab="questions">Q&A 답변 <span class="badge" id="q-badge" style="display:none">0</span></button>
+      <button data-tab="posts" class="active">글 · LinkedIn</button>
+      <button data-tab="questions">라운지 답변 <span class="badge" id="q-badge" style="display:none">0</span></button>
+      <button data-tab="comments">댓글 <span class="badge" id="c-badge" style="display:none">0</span></button>
       <button data-tab="inquiries">신청 · 문의 <span class="badge" id="i-badge" style="display:none">0</span></button>
-      <button data-tab="posts">인사이트 글</button>
+      <button data-tab="schedule">특강 일정</button>
+    </div>
+
+    <!-- 글 · LinkedIn -->
+    <div class="admin-panel active" id="panel-posts">
+      <div class="form-card" style="margin-bottom:20px">
+        <h3 style="margin-bottom:4px" id="post-form-title">글 올리기</h3>
+        <p class="small muted" style="margin-bottom:12px">LinkedIn 글은 주소만 붙여넣으면 됩니다. 제목은 비워도 되고, 한 줄 적어두면 목록과 검색에 도움이 됩니다. 사이트 글은 주소 칸을 비우고 본문을 쓰세요.</p>
+        <form class="form form-grid" id="post-form">
+          <input type="hidden" name="id" />
+          <div class="full"><label>LinkedIn 글 주소 (붙여넣기)</label><input name="linkedin_url" placeholder="https://www.linkedin.com/posts/joeyseo_…  또는 피드의 '링크 복사' 주소" inputmode="url" />
+            <div class="li-preview" id="li-preview"></div></div>
+          <div class="full"><label>제목 <span class="muted">(LinkedIn 글은 선택)</span></label><input name="title" placeholder="한 줄 제목" /></div>
+          <div><label>분류</label><input name="category" placeholder="채용 트렌드 / 서류 / 면접 / 이직" /></div>
+          <div><label>원문 링크 (선택)</label><input name="link" placeholder="https://" /></div>
+          <div class="full"><label>요약 <span class="muted">(목록에 보이는 2~3줄, 선택)</span></label><textarea name="summary" style="min-height:70px"></textarea></div>
+          <div class="full"><label>본문 <span class="muted">(사이트 글일 때. 줄바꿈 그대로 표시)</span></label><textarea name="body" style="min-height:160px"></textarea></div>
+          <div class="full check-row"><input type="checkbox" name="published" id="post-pub" checked /><label for="post-pub">바로 공개</label></div>
+          <div class="full"><button class="btn btn-primary" type="submit">게시</button> <button class="btn btn-ghost" type="button" id="post-reset">새 글</button> <span class="hint" id="post-msg"></span></div>
+        </form>
+      </div>
+      <div class="qa-filter" id="p-filter">
+        <button class="active" data-kind="all">전체</button><button data-kind="article">사이트 글</button><button data-kind="linkedin">LinkedIn</button><button data-kind="draft">임시저장</button>
+      </div>
+      <div class="admin-list" id="p-list"></div>
+    </div>
+
+    <!-- 라운지 -->
+    <div class="admin-panel" id="panel-questions">
+      <div class="form-card" style="margin-bottom:20px">
+        <h3 style="margin-bottom:12px">직접 올리기</h3>
+        <form class="form form-grid" id="newq-form">
+          <div><label>종류</label><select name="kind" id="newq-kind"><option value="question">Q&A (질문 + 답변)</option><option value="weekly">이번 주 질문 (상단 고정)</option><option value="poll">투표</option></select></div>
+          <div><label>말머리</label><select name="board" id="newq-board"></select></div>
+          <div><label>분류</label><select name="category" id="newq-cat"></select></div>
+          <div><label>질문자 상황 (선택)</label><input name="situation" placeholder="예: 졸업 후 취준 중" /></div>
+          <div class="full"><label>질문 / 주제</label><input name="question" required /></div>
+          <div class="full" id="newq-answer-wrap"><label>답변</label><textarea name="answer"></textarea></div>
+          <div class="full" id="newq-poll-wrap" hidden><label>투표 선택지 (2~4개, 한 줄에 하나)</label><textarea name="opts" style="min-height:90px" placeholder="대기업&#10;스타트업&#10;외국계"></textarea></div>
+          <div class="full check-row"><input type="checkbox" name="pinned" id="newq-pinned" /><label for="newq-pinned">상단 고정</label></div>
+          <div class="full"><button class="btn btn-primary" type="submit">올리기</button> <span class="hint" id="newq-msg"></span></div>
+        </form>
+      </div>
+      <div class="qa-filter" id="q-filter">
+        <button class="active" data-st="pending">답변 대기</button><button data-st="published">공개됨</button><button data-st="hidden">비공개</button><button data-st="all">전체</button>
+      </div>
+      <div class="admin-list" id="q-list"></div>
+    </div>
+
+    <!-- 댓글 -->
+    <div class="admin-panel" id="panel-comments">
+      <p class="small muted" style="margin-bottom:12px">최근 댓글 100개. 신고 3회 누적 시 자동 숨김. 매일 아침 8시 요약 메일이 갑니다.</p>
+      <div class="qa-filter" id="c-filter">
+        <button class="active" data-c="all">전체</button><button data-c="reported">신고됨</button><button data-c="hidden">숨김</button>
+      </div>
+      <div class="admin-list" id="c-list"></div>
+    </div>
+
+    <!-- 신청 · 문의 -->
+    <div class="admin-panel" id="panel-inquiries">
+      <div class="qa-filter" id="i-filter">
+        <button class="active" data-type="all">전체</button><button data-type="apply">공개 코칭 신청</button><button data-type="coaching">1:1 코칭</button><button data-type="lecture">특강 요청</button><button data-type="inquiry">문의</button>
+      </div>
+      <div class="admin-list" id="i-list"></div>
     </div>
 
     <!-- 일정 -->
-    <div class="admin-panel active" id="panel-schedule">
+    <div class="admin-panel" id="panel-schedule">
       <div class="form-card">
         <h3 style="margin-bottom:14px">다음 특강 안내 (메인 · 신청 페이지에 표시)</h3>
         <form class="form form-grid" id="schedule-form">
@@ -81,50 +147,6 @@
         </form>
       </div>
     </div>
-
-    <!-- 질문 -->
-    <div class="admin-panel" id="panel-questions">
-      <div class="form-card" style="margin-bottom:20px">
-        <h3 style="margin-bottom:12px">Q&A 직접 올리기</h3>
-        <form class="form form-grid" id="newq-form">
-          <div><label>분류</label><select name="category" id="newq-cat"></select></div>
-          <div><label>질문자 상황 (선택)</label><input name="situation" placeholder="예: 졸업 후 취준 중" /></div>
-          <div class="full"><label>질문</label><input name="question" required /></div>
-          <div class="full"><label>답변</label><textarea name="answer" required></textarea></div>
-          <div class="full"><button class="btn btn-primary" type="submit">공개로 올리기</button> <span class="hint" id="newq-msg"></span></div>
-        </form>
-      </div>
-      <div class="qa-filter" id="q-filter">
-        <button class="active" data-st="pending">답변 대기</button><button data-st="published">공개됨</button><button data-st="hidden">비공개</button><button data-st="all">전체</button>
-      </div>
-      <div class="admin-list" id="q-list"></div>
-    </div>
-
-    <!-- 신청 · 문의 -->
-    <div class="admin-panel" id="panel-inquiries">
-      <div class="qa-filter" id="i-filter">
-        <button class="active" data-type="all">전체</button><button data-type="apply">공개 코칭 신청</button><button data-type="coaching">1:1 코칭</button><button data-type="lecture">특강 요청</button><button data-type="inquiry">문의</button>
-      </div>
-      <div class="admin-list" id="i-list"></div>
-    </div>
-
-    <!-- 글 -->
-    <div class="admin-panel" id="panel-posts">
-      <div class="form-card" style="margin-bottom:20px">
-        <h3 style="margin-bottom:12px" id="post-form-title">새 글 쓰기</h3>
-        <form class="form form-grid" id="post-form">
-          <input type="hidden" name="id" />
-          <div class="full"><label>제목</label><input name="title" required /></div>
-          <div><label>분류</label><input name="category" placeholder="채용 트렌드 / 서류 / 면접 / 취업뉴스" /></div>
-          <div><label>원문 링크 (선택)</label><input name="link" placeholder="https://" /></div>
-          <div class="full"><label>요약 (목록에 보이는 2~3줄)</label><textarea name="summary" style="min-height:70px"></textarea></div>
-          <div class="full"><label>본문 (선택 — 줄바꿈 그대로 표시)</label><textarea name="body" style="min-height:180px"></textarea></div>
-          <div class="full check-row"><input type="checkbox" name="published" id="post-pub" /><label for="post-pub">바로 공개</label></div>
-          <div class="full"><button class="btn btn-primary" type="submit">저장</button> <button class="btn btn-ghost" type="button" id="post-reset">새 글</button> <span class="hint" id="post-msg"></span></div>
-        </form>
-      </div>
-      <div class="admin-list" id="p-list"></div>
-    </div>
   </section>
 </main>
 
@@ -134,9 +156,16 @@
 <script>
 (async function () {
   const $ = (s) => document.querySelector(s);
+  const SITE_URL = "https://jobhandbook.github.io";
   const show = (id) => { ["setup", "login", "dash"].forEach((x) => ($("#" + x).style.display = x === id ? "" : "none")); };
+  const nl2br = (s) => esc(s).replace(/\n/g, "<br/>");
 
   if (!DB.ready) { show("setup"); return; }
+
+  // 안드로이드 공유(share_target) · 수동 ?url= 로 들어온 경우: LinkedIn 글 주소를 미리 채웁니다.
+  const params = new URLSearchParams(location.search);
+  const sharedUrl = [params.get("url"), params.get("text"), params.get("title")].find((v) => v && /linkedin\.com/.test(v));
+  if (sharedUrl) { try { sessionStorage.setItem("jh_shared_li", sharedUrl.match(/https?:\/\/\S+/)[0]); } catch (_) {} history.replaceState(null, "", location.pathname); }
 
   // ---- auth ----
   async function boot() {
@@ -145,7 +174,9 @@
     show("dash");
     $("#logout-btn").style.display = "";
     $("#whoami").textContent = user.email + " 로 로그인됨";
-    await Promise.all([loadSchedule(), loadQuestions(), loadInquiries(), loadPosts()]);
+    await Promise.all([loadSchedule(), loadQuestions(), loadInquiries(), loadPosts(), loadComments()]);
+    let pending = null; try { pending = sessionStorage.getItem("jh_shared_li"); sessionStorage.removeItem("jh_shared_li"); } catch (_) {}
+    if (pending) { pf.elements.linkedin_url.value = pending; pf.elements.linkedin_url.dispatchEvent(new Event("input")); switchTab("posts"); pf.elements.title.focus(); }
   }
   $("#login-form").addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -156,11 +187,11 @@
   $("#logout-btn").addEventListener("click", async () => { await DB.signOut(); location.reload(); });
 
   // ---- tabs ----
-  document.querySelectorAll(".admin-tabs button").forEach((b) => b.addEventListener("click", () => {
-    document.querySelectorAll(".admin-tabs button").forEach((x) => x.classList.remove("active"));
-    document.querySelectorAll(".admin-panel").forEach((x) => x.classList.remove("active"));
-    b.classList.add("active"); $("#panel-" + b.dataset.tab).classList.add("active");
-  }));
+  function switchTab(name) {
+    document.querySelectorAll(".admin-tabs button").forEach((x) => x.classList.toggle("active", x.dataset.tab === name));
+    document.querySelectorAll(".admin-panel").forEach((x) => x.classList.toggle("active", x.id === "panel-" + name));
+  }
+  document.querySelectorAll(".admin-tabs button").forEach((b) => b.addEventListener("click", () => switchTab(b.dataset.tab)));
 
   // ---- schedule ----
   async function loadSchedule() {
@@ -177,13 +208,20 @@
     catch (err) { $("#schedule-msg").textContent = "저장 실패: " + err.message; }
   });
 
-  // ---- questions ----
+  // ---- 라운지 (questions) ----
   const catOptions = Object.entries(CATS).map(([k, v]) => `<option value="${k}">${v}</option>`).join("");
-  $("#newq-cat").innerHTML = catOptions;
+  const boardOptions = Object.entries(BOARDS).map(([k, v]) => `<option value="${k}">${v}</option>`).join("");
+  $("#newq-cat").innerHTML = catOptions; $("#newq-board").innerHTML = boardOptions;
+  $("#newq-kind").addEventListener("change", (e) => {
+    const k = e.target.value;
+    $("#newq-answer-wrap").hidden = k !== "question"; $("#newq-poll-wrap").hidden = k !== "poll";
+    $("#newq-pinned").checked = k === "weekly";
+  });
   let qAll = []; let qState = "pending";
+  const KIND_LABEL = { question: "Q&A", poll: "투표", weekly: "이번 주 질문" };
   async function loadQuestions() {
     qAll = await DB.allQuestions();
-    const pending = qAll.filter((q) => q.status === "pending").length;
+    const pending = qAll.filter((q) => q.status === "pending" && q.kind === "question").length;
     const badge = $("#q-badge"); badge.textContent = pending; badge.style.display = pending ? "" : "none";
     renderQuestions();
   }
@@ -191,49 +229,109 @@
     const rows = qAll.filter((q) => qState === "all" || q.status === qState);
     $("#q-list").innerHTML = rows.length ? rows.map((q) => `
       <div class="admin-item ${q.status}" data-id="${q.id}">
-        <div class="meta"><span>#${q.id}</span><span>${fmtDate(q.created_at)}</span><span>${esc(q.situation || "")}</span><span>${esc(q.nickname || "")}</span><span class="badge ${q.status === "pending" ? "" : q.status === "published" ? "green" : "gray"}">${{ pending: "답변 대기", published: "공개됨", hidden: "비공개" }[q.status]}</span>${q.is_private ? `<span class="badge red">비공개 요청 · 이메일로만 답변</span><span>${esc(q.email || "")}</span>` : ""}</div>
-        <h4>Q. ${esc(q.question)}</h4>
-        <label class="small muted">분류</label>
-        <select class="q-cat" style="margin:4px 0 10px;max-width:220px">${catOptions}</select>
-        <label class="small muted">답변</label>
-        <textarea class="q-answer" placeholder="${q.is_private ? "답변을 적고 '이메일로 답장'을 누르면 메일 앱이 열립니다. 저장은 '답변 완료(비공개)'." : "답변을 적고 '공개 저장'을 누르면 사이트에 올라갑니다."}">${esc(q.answer || "")}</textarea>
+        <div class="meta"><span>#${q.id}</span><span>${fmtDate(q.created_at)}</span>${q.kind !== "question" ? `<span class="badge">${KIND_LABEL[q.kind]}</span>` : ""}<span class="badge board-${esc(q.board || "prep")}">${esc(BOARDS[q.board] || "취준")}</span><span>${esc(q.situation || "")}</span><span>${esc(q.nickname || "")}</span><span class="badge ${q.status === "pending" ? "" : q.status === "published" ? "green" : "gray"}">${{ pending: "답변 대기", published: "공개됨", hidden: "비공개" }[q.status]}</span>${q.pinned ? `<span class="badge">상단 고정</span>` : ""}${q.is_private ? `<span class="badge red">비공개 요청 · 이메일로만 답변</span><span>${esc(q.email || "")}</span>` : q.email ? `<span>알림 이메일 등록됨</span>` : ""}<span>댓글 ${q.comment_count || 0}</span></div>
+        <h4>${q.kind === "weekly" ? "" : "Q. "}${esc(q.question)}</h4>
+        ${q.kind === "poll" && Array.isArray(q.poll_options) ? `<pre>선택지: ${q.poll_options.map(esc).join(" / ")}</pre>` : ""}
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin:4px 0 10px">
+          <label class="small muted">말머리 <select class="q-board" style="margin-left:4px;max-width:120px">${boardOptions}</select></label>
+          <label class="small muted">분류 <select class="q-cat" style="margin-left:4px;max-width:180px">${catOptions}</select></label>
+        </div>
+        ${q.kind === "question" ? `<label class="small muted">답변</label>
+        <textarea class="q-answer" placeholder="${q.is_private ? "답변을 적고 '이메일로 답장'을 누르면 메일 앱이 열립니다. 저장은 '답변 완료(비공개)'." : "답변을 적고 '공개 저장'을 누르면 사이트에 올라가고, 질문자가 알림 이메일을 남겼다면 메일이 갑니다."}">${esc(q.answer || "")}</textarea>` : ""}
         <div class="row">
           ${q.is_private
             ? `<button class="btn btn-primary btn-sm" data-act="mail">이메일로 답장</button><button class="btn btn-ghost btn-sm" data-act="hide">답변 완료 (비공개 저장)</button>`
-            : `<button class="btn btn-primary btn-sm" data-act="publish">공개 저장</button><button class="btn btn-ghost btn-sm" data-act="hide">비공개 저장</button>`}
+            : q.kind === "question"
+              ? `<button class="btn btn-primary btn-sm" data-act="publish">공개 저장</button><button class="btn btn-ghost btn-sm" data-act="hide">비공개 저장</button>`
+              : `<button class="btn btn-primary btn-sm" data-act="save">저장</button><button class="btn btn-ghost btn-sm" data-act="${q.status === "hidden" ? "unhide" : "hide"}">${q.status === "hidden" ? "다시 공개" : "내리기"}</button>`}
+          ${q.is_private ? "" : `<button class="btn btn-ghost btn-sm" data-act="pin">${q.pinned ? "고정 해제" : "상단 고정"}</button><button class="btn btn-ghost btn-sm" data-act="cmts">댓글 ${q.comment_count || 0} · 보기 / 답글</button><a class="btn btn-ghost btn-sm" href="qna.html#q-${q.id}" target="_blank" rel="noopener">사이트에서 보기</a>`}
           <button class="btn btn-ghost btn-sm" data-act="delete" style="color:var(--red)">삭제</button>
         </div>
+        <div class="q-cmts" hidden></div>
       </div>`).join("") : `<p class="muted">해당 항목이 없습니다.</p>`;
-    rows.forEach((q) => { const el = document.querySelector(`.admin-item[data-id="${q.id}"] .q-cat`); if (el) el.value = q.category || "prep"; });
+    rows.forEach((q) => { const el = document.querySelector(`.admin-item[data-id="${q.id}"]`); if (!el) return; el.querySelector(".q-cat").value = q.category || "prep"; el.querySelector(".q-board").value = q.board || "prep"; });
   }
   $("#q-filter").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; document.querySelectorAll("#q-filter button").forEach((x) => x.classList.remove("active")); b.classList.add("active"); qState = b.dataset.st; renderQuestions(); });
   $("#q-list").addEventListener("click", async (e) => {
     const b = e.target.closest("button[data-act]"); if (!b) return;
-    const item = b.closest(".admin-item"); const id = Number(item.dataset.id);
-    const answer = item.querySelector(".q-answer").value.trim(); const category = item.querySelector(".q-cat").value;
+    const item = b.closest(".admin-item"); const id = Number(item.dataset.id); const q = qAll.find((x) => x.id === id);
+    if (b.dataset.act === "cmt-reply" || b.dataset.act === "cmt-hide" || b.dataset.act === "cmt-del") return; // 아래 댓글 핸들러
+    const answerEl = item.querySelector(".q-answer"); const answer = answerEl ? answerEl.value.trim() : null;
+    const category = item.querySelector(".q-cat").value; const board = item.querySelector(".q-board").value;
     try {
       if (b.dataset.act === "mail") {
-        const q = qAll.find((x) => x.id === id);
         if (!answer) { alert("답변을 먼저 적어주세요."); return; }
-        await DB.updateQuestion(id, { answer, category });
+        await DB.updateQuestion(id, { answer, category, board });
         const body = `안녕하세요, 서재민입니다.\n\n보내주신 질문:\n${q.question}\n\n답변:\n${answer}\n\n— 서재민 (취업핸드북) · jobhandbook.github.io`;
         window.open(`mailto:${encodeURIComponent(q.email || "")}?subject=${encodeURIComponent("[취업핸드북] 질문에 대한 답변")}&body=${encodeURIComponent(body)}`, "_self");
         return;
       }
-      if (b.dataset.act === "delete") { if (!confirm("이 질문을 삭제할까요?")) return; await DB.deleteQuestion(id); }
-      else if (b.dataset.act === "publish") { if (!answer) { alert("답변을 입력하세요."); return; } await DB.updateQuestion(id, { answer, category, status: "published", answered_at: new Date().toISOString() }); }
-      else { await DB.updateQuestion(id, { answer: answer || null, category, status: "hidden" }); }
+      if (b.dataset.act === "cmts") { const box = item.querySelector(".q-cmts"); box.hidden = !box.hidden; if (!box.hidden) await renderItemComments(box, "question", id); return; }
+      if (b.dataset.act === "delete") { if (!confirm("이 글과 댓글을 모두 삭제할까요?")) return; await DB.deleteQuestion(id); }
+      else if (b.dataset.act === "publish") { if (!answer) { alert("답변을 입력하세요."); return; } await DB.updateQuestion(id, { answer, category, board, status: "published", answered_at: new Date().toISOString() }); }
+      else if (b.dataset.act === "save") { await DB.updateQuestion(id, { category, board }); }
+      else if (b.dataset.act === "unhide") { await DB.updateQuestion(id, { status: "published" }); }
+      else if (b.dataset.act === "pin") { await DB.updateQuestion(id, { pinned: !q.pinned }); }
+      else { await DB.updateQuestion(id, { answer: answer || null, category, board, status: "hidden" }); }
       await loadQuestions();
     } catch (err) { alert("실패: " + err.message); }
   });
   $("#newq-form").addEventListener("submit", async (e) => {
-    e.preventDefault(); const f = e.target;
+    e.preventDefault(); const f = e.target; const kind = f.elements.kind.value;
     try {
-      const { error } = await DB.client.from("questions").insert({ category: f.elements.category.value, situation: f.elements.situation.value || null, question: f.elements.question.value, answer: f.elements.answer.value, status: "published", answered_at: new Date().toISOString() });
-      if (error) throw error;
-      f.reset(); $("#newq-msg").textContent = "올라갔습니다."; await loadQuestions();
+      const row = { kind, board: f.elements.board.value, category: f.elements.category.value, situation: f.elements.situation.value || null, question: f.elements.question.value.trim(), pinned: f.elements.pinned.checked, status: "published", answered_at: new Date().toISOString() };
+      if (kind === "question") { row.answer = f.elements.answer.value.trim(); if (!row.answer) { $("#newq-msg").textContent = "답변을 입력하세요."; return; } }
+      if (kind === "poll") { const opts = f.elements.opts.value.split("\n").map((s) => s.trim()).filter(Boolean); if (opts.length < 2 || opts.length > 4) { $("#newq-msg").textContent = "선택지는 2~4개입니다."; return; } row.poll_options = opts; }
+      if (kind === "weekly") { row.nickname = "서재민"; }
+      await DB.insertQuestion(row);
+      f.reset(); $("#newq-kind").dispatchEvent(new Event("change")); $("#newq-msg").textContent = "올라갔습니다."; await loadQuestions();
     } catch (err) { $("#newq-msg").textContent = "실패: " + err.message; }
   });
+
+  // ---- 댓글 (글별 + 전체) ----
+  function adminCmtHtml(c, withTarget) {
+    return `<div class="admin-cmt ${c.is_hidden ? "hidden-cmt" : ""}" data-cid="${c.id}">
+      <div class="meta">${withTarget ? `<span class="badge gray">${c.target_type === "question" ? "라운지" : "글"} #${c.target_id}</span>` : ""}<b style="color:var(--ink)">${esc(c.nickname)}</b>${c.is_admin ? `<span class="badge-admin">채용담당자</span>` : ""}<span>${fmtDate(c.created_at)}</span>${c.reports ? `<span class="badge red">신고 ${c.reports}</span>` : ""}${c.is_hidden ? `<span class="badge gray">숨김</span>` : ""}</div>
+      <p>${nl2br(c.body)}</p>
+      <div class="row" style="margin-top:4px"><button class="btn btn-ghost btn-sm" data-act="cmt-hide">${c.is_hidden ? "복원" : "숨김"}</button><button class="btn btn-ghost btn-sm" data-act="cmt-del" style="color:var(--red)">삭제</button>${withTarget ? `<a class="btn btn-ghost btn-sm" href="${c.target_type === "question" ? "qna.html#q-" : "insight.html#post-"}${c.target_id}" target="_blank" rel="noopener">글 보기</a>` : ""}</div>
+    </div>`;
+  }
+  async function renderItemComments(box, type, id) {
+    box.innerHTML = `<p class="muted small">불러오는 중…</p>`;
+    const { data, error } = await DB.client.from("comments").select("*").eq("target_type", type).eq("target_id", id).order("created_at", { ascending: true });
+    if (error) { box.innerHTML = `<p class="muted small">실패: ${esc(error.message)}</p>`; return; }
+    box.innerHTML = `<div style="display:grid;gap:8px;margin-top:12px">${(data || []).map((c) => adminCmtHtml(c, false)).join("") || `<p class="muted small">아직 댓글이 없습니다.</p>`}</div>
+      <form class="admin-reply" data-type="${type}" data-id="${id}"><textarea placeholder="채용담당자 배지로 댓글을 남깁니다. (질문자가 알림 이메일을 남겼다면 메일이 갑니다)" required></textarea><div><button class="btn btn-primary btn-sm" type="submit">댓글 남기기</button></div></form>`;
+  }
+  document.addEventListener("submit", async (e) => {
+    const f = e.target.closest(".admin-reply"); if (!f) return;
+    e.preventDefault();
+    try { await DB.adminComment(f.dataset.type, Number(f.dataset.id), f.querySelector("textarea").value.trim()); await renderItemComments(f.parentElement, f.dataset.type, Number(f.dataset.id)); loadQuestions(); loadPosts(); loadComments(); }
+    catch (err) { alert("실패: " + err.message); }
+  });
+  document.addEventListener("click", async (e) => {
+    const b = e.target.closest("button[data-act^='cmt-']"); if (!b) return;
+    const el = b.closest(".admin-cmt"); const cid = Number(el.dataset.cid);
+    try {
+      if (b.dataset.act === "cmt-del") { if (!confirm("이 댓글을 삭제할까요?")) return; await DB.deleteComment(cid); }
+      else { const hidden = el.classList.contains("hidden-cmt"); await DB.updateComment(cid, { is_hidden: !hidden }); }
+      const box = el.closest(".q-cmts, .p-cmts");
+      if (box) { const host = box.closest(".admin-item"); await renderItemComments(box, box.classList.contains("q-cmts") ? "question" : "post", Number(host.dataset.id)); }
+      await loadComments(); loadQuestions(); loadPosts();
+    } catch (err) { alert("실패: " + err.message); }
+  });
+  let cAll = []; let cMode = "all";
+  async function loadComments() {
+    cAll = await DB.allComments(100);
+    const flagged = cAll.filter((c) => c.reports > 0 && !c.is_hidden).length;
+    const badge = $("#c-badge"); badge.textContent = flagged; badge.style.display = flagged ? "" : "none";
+    renderComments();
+  }
+  function renderComments() {
+    const rows = cAll.filter((c) => cMode === "all" || (cMode === "reported" ? c.reports > 0 : c.is_hidden));
+    $("#c-list").innerHTML = rows.length ? `<div style="display:grid;gap:10px">${rows.map((c) => adminCmtHtml(c, true)).join("")}</div>` : `<p class="muted">댓글이 없습니다.</p>`;
+  }
+  $("#c-filter").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; document.querySelectorAll("#c-filter button").forEach((x) => x.classList.remove("active")); b.classList.add("active"); cMode = b.dataset.c; renderComments(); });
 
   // ---- inquiries ----
   let iAll = []; let iType = "all";
@@ -272,35 +370,63 @@
     } catch (err) { alert("실패: " + err.message); }
   });
 
-  // ---- posts ----
-  let pAll = [];
+  // ---- posts (글 · LinkedIn) ----
+  let pAll = []; let pMode = "all";
+  const pf = $("#post-form");
+  function liPreview() {
+    const url = pf.elements.linkedin_url.value.trim(); const box = $("#li-preview");
+    if (!url) { box.innerHTML = ""; return; }
+    const embed = linkedinEmbed(url);
+    box.innerHTML = embed
+      ? `<p class="small" style="color:var(--green);margin:6px 0">LinkedIn 글로 인식했습니다. 아래처럼 사이트에 보입니다.</p><div class="li-embed"><iframe src="${esc(embed)}" height="420" frameborder="0" title="미리보기"></iframe></div>`
+      : `<p class="small" style="color:var(--red);margin:6px 0">글 번호를 찾지 못했습니다. LinkedIn 글의 ··· 메뉴 → '게시물 링크 복사'로 받은 주소(…activity-숫자… 또는 urn:li:activity:…)를 넣어주세요.</p>`;
+  }
+  pf.elements.linkedin_url.addEventListener("input", liPreview);
   async function loadPosts() { pAll = await DB.allPosts(); renderPosts(); }
   function renderPosts() {
-    $("#p-list").innerHTML = pAll.length ? pAll.map((p) => `
-      <div class="admin-item ${p.published ? "published" : ""}" data-id="${p.id}">
-        <div class="meta"><span class="badge ${p.published ? "green" : "gray"}">${p.published ? "공개" : "임시저장"}</span><span>${fmtDate(p.published_at || p.created_at)}</span><span>${esc(p.category || "")}</span></div>
-        <h4>${esc(p.title)}</h4>
-        <pre>${esc(p.summary || "")}</pre>
-        <div class="row"><button class="btn btn-ghost btn-sm" data-act="edit">수정</button><button class="btn btn-ghost btn-sm" data-act="toggle">${p.published ? "비공개로" : "공개로"}</button><button class="btn btn-ghost btn-sm" data-act="delete" style="color:var(--red)">삭제</button></div>
-      </div>`).join("") : `<p class="muted">아직 글이 없습니다.</p>`;
+    const rows = pAll.filter((p) => pMode === "all" || (pMode === "draft" ? !p.published : pMode === "linkedin" ? p.kind === "linkedin" : p.kind !== "linkedin"));
+    $("#p-list").innerHTML = rows.length ? rows.map((p) => {
+      const li = p.kind === "linkedin"; const postUrl = `${SITE_URL}/insight.html#post-${p.id}`;
+      return `<div class="admin-item ${p.published ? "published" : ""}" data-id="${p.id}">
+        <div class="meta"><span class="badge ${p.published ? "green" : "gray"}">${p.published ? "공개" : "임시저장"}</span>${li ? `<span class="badge li-badge">LinkedIn</span>` : ""}<span>${fmtDate(p.published_at || p.created_at)}</span><span>${esc(p.category || "")}</span><span>댓글 ${p.comment_count || 0}</span></div>
+        <h4>${esc(p.title || "LinkedIn 글")}</h4>
+        ${li ? `<pre>${esc(p.linkedin_url || "")}</pre>` : `<pre>${esc(p.summary || "")}</pre>`}
+        <div class="row">
+          <button class="btn btn-ghost btn-sm" data-act="edit">수정</button>
+          <button class="btn btn-ghost btn-sm" data-act="toggle">${p.published ? "비공개로" : "공개로"}</button>
+          ${p.published && !li ? `<a class="btn btn-ghost btn-sm" href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(postUrl)}" target="_blank" rel="noopener">LinkedIn에 공유</a>` : ""}
+          ${p.published ? `<button class="btn btn-ghost btn-sm" data-act="copy" data-url="${esc(postUrl)}">링크 복사</button><button class="btn btn-ghost btn-sm" data-act="pcmts">댓글 보기 / 답글</button>` : ""}
+          <button class="btn btn-ghost btn-sm" data-act="delete" style="color:var(--red)">삭제</button>
+        </div>
+        <div class="p-cmts" hidden></div>
+      </div>`;
+    }).join("") : `<p class="muted">아직 글이 없습니다.</p>`;
   }
-  const pf = $("#post-form");
-  $("#post-reset").addEventListener("click", () => { pf.reset(); pf.elements.id.value = ""; $("#post-form-title").textContent = "새 글 쓰기"; $("#post-msg").textContent = ""; });
+  $("#p-filter").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; document.querySelectorAll("#p-filter button").forEach((x) => x.classList.remove("active")); b.classList.add("active"); pMode = b.dataset.kind; renderPosts(); });
+  function resetPostForm() { pf.reset(); pf.elements.id.value = ""; pf.elements.published.checked = true; $("#li-preview").innerHTML = ""; $("#post-form-title").textContent = "글 올리기"; $("#post-msg").textContent = ""; }
+  $("#post-reset").addEventListener("click", resetPostForm);
   pf.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const p = { title: pf.elements.title.value.trim(), category: pf.elements.category.value.trim() || null, link: pf.elements.link.value.trim() || null, summary: pf.elements.summary.value.trim() || null, body: pf.elements.body.value || null, published: pf.elements.published.checked };
+    const liUrl = pf.elements.linkedin_url.value.trim();
+    const li = !!liUrl;
+    if (li && !linkedinEmbed(liUrl)) { $("#post-msg").textContent = "LinkedIn 글 주소에서 글 번호를 찾지 못했습니다."; return; }
+    const title = pf.elements.title.value.trim() || (li ? `LinkedIn 글 · ${fmtDate(new Date().toISOString())}` : "");
+    if (!title) { $("#post-msg").textContent = "제목을 입력하세요."; return; }
+    const p = { kind: li ? "linkedin" : "article", linkedin_url: li ? liUrl : null, title, category: pf.elements.category.value.trim() || (li ? "LinkedIn" : null), link: pf.elements.link.value.trim() || null, summary: pf.elements.summary.value.trim() || null, body: pf.elements.body.value || null, published: pf.elements.published.checked };
     if (p.published) p.published_at = new Date().toISOString();
     if (pf.elements.id.value) p.id = Number(pf.elements.id.value);
-    try { await DB.upsertPost(p); $("#post-msg").textContent = "저장됐습니다."; pf.reset(); pf.elements.id.value = ""; $("#post-form-title").textContent = "새 글 쓰기"; await loadPosts(); }
+    try { await DB.upsertPost(p); resetPostForm(); $("#post-msg").textContent = "게시됐습니다."; await loadPosts(); }
     catch (err) { $("#post-msg").textContent = "실패: " + err.message; }
   });
   $("#p-list").addEventListener("click", async (e) => {
     const b = e.target.closest("button[data-act]"); if (!b) return;
-    const id = Number(b.closest(".admin-item").dataset.id); const p = pAll.find((x) => x.id === id);
+    const item = b.closest(".admin-item"); const id = Number(item.dataset.id); const p = pAll.find((x) => x.id === id);
     try {
-      if (b.dataset.act === "edit") { pf.elements.id.value = p.id; pf.elements.title.value = p.title; pf.elements.category.value = p.category || ""; pf.elements.link.value = p.link || ""; pf.elements.summary.value = p.summary || ""; pf.elements.body.value = p.body || ""; pf.elements.published.checked = !!p.published; $("#post-form-title").textContent = "글 수정 #" + p.id; window.scrollTo({ top: 0, behavior: "smooth" }); return; }
+      if (b.dataset.act === "edit") { pf.elements.id.value = p.id; pf.elements.linkedin_url.value = p.linkedin_url || ""; pf.elements.title.value = p.title || ""; pf.elements.category.value = p.category || ""; pf.elements.link.value = p.link || ""; pf.elements.summary.value = p.summary || ""; pf.elements.body.value = p.body || ""; pf.elements.published.checked = !!p.published; liPreview(); $("#post-form-title").textContent = "글 수정 #" + p.id; window.scrollTo({ top: 0, behavior: "smooth" }); return; }
+      if (b.dataset.act === "copy") { await navigator.clipboard.writeText(b.dataset.url); b.textContent = "복사됨"; setTimeout(() => (b.textContent = "링크 복사"), 1500); return; }
+      if (b.dataset.act === "pcmts") { const box = item.querySelector(".p-cmts"); box.hidden = !box.hidden; if (!box.hidden) await renderItemComments(box, "post", id); return; }
       if (b.dataset.act === "toggle") { await DB.upsertPost({ id, published: !p.published, published_at: !p.published ? new Date().toISOString() : p.published_at }); }
-      if (b.dataset.act === "delete") { if (!confirm("이 글을 삭제할까요?")) return; await DB.deletePost(id); }
+      if (b.dataset.act === "delete") { if (!confirm("이 글과 댓글을 삭제할까요?")) return; await DB.deletePost(id); }
       await loadPosts();
     } catch (err) { alert("실패: " + err.message); }
   });

@@ -361,6 +361,9 @@ ul { margin: 0; padding: 0; list-style: none; }
 .contact-tiles .ic { width: 48px; height: 48px; border-radius: 10px; display: grid; place-items: center; font-weight: 900; font-size: 18px; }
 .contact-tiles .ic.kakao { background: var(--kakao); color: #191919; }
 .contact-tiles .ic.in { background: #0a66c2; color: #fff; }
+.contact-tiles .ic.in svg { width: 26px; height: 26px; fill: #fff; display: block; }
+.li-ico { width: 1em; height: 1em; fill: currentColor; vertical-align: -0.14em; margin-right: 0.45em; flex: none; }
+.btn .li-ico, .social .li-ico { margin-right: 0; width: 1.05em; height: 1.05em; }
 .contact-tiles .ic.mail { background: var(--accent); color: #fff; }
 .contact-tiles b { display: block; color: var(--ink); font-size: 15px; }
 .contact-tiles span { display: block; color: var(--ink-3); font-size: 13px; margin-top: 2px; }

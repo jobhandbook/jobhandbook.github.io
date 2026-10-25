@@ -418,9 +418,9 @@ window.SITE = {
     coaching: (fd) => ({ name: fd.get("name"), phone: fd.get("phone"), email: fd.get("email"), situation: `${fd.get("kind")} · ${fd.get("situation")}`, session: [fd.get("mode"), fd.get("time")].filter(Boolean).join(" · "), message: [fd.get("target") ? "목표: " + fd.get("target") : "", fd.get("message")].filter(Boolean).join("\n") }),
     lecture: (fd) => ({ name: `${fd.get("org")} · ${fd.get("person")}`, phone: fd.get("phone"), email: fd.get("email"), situation: [fd.get("audience"), fd.get("size")].filter(Boolean).join(" · "), session: [fd.get("date"), fd.get("mode")].filter(Boolean).join(" · "), message: [fd.get("message"), fd.get("budget") ? "예산: " + fd.get("budget") : ""].filter(Boolean).join("\n") }),
   };
-  async function handleInquiry(form, type) {
+  async function handleInquiry(form, type, builder) {
     const fd = new FormData(form);
-    const b = BUILDERS[type](fd);
+    const b = BUILDERS[builder || type](fd);
     const payload = { type, name: b.name, phone: b.phone || null, email: b.email || null, situation: b.situation || null, session: b.session || null, message: b.message || null };
     const note = form.querySelector(".form-note");
     if (ready) {
@@ -441,4 +441,42 @@ window.SITE = {
     const f = document.querySelector(sel);
     if (f) f.addEventListener("submit", (e) => { e.preventDefault(); handleInquiry(f, type); });
   });
+
+  // ---------- 컨택하기 (contact.html): 기업 · 기관 / 취준생 · 경력직 두 입구 ----------
+  // 기업 · 기관: 특강 · 세미나 · 자문은 lecture, 언론 · 제휴는 inquiry. 개인: 1:1 코칭은 coaching, 그 외는 inquiry.
+  BUILDERS.org = (fd) => ({ name: `${fd.get("org")} · ${fd.get("person")}`, phone: fd.get("phone"), email: fd.get("email"), situation: [fd.get("kind"), fd.get("audience")].filter(Boolean).join(" · "), session: [fd.get("date"), fd.get("mode")].filter(Boolean).join(" · "), message: fd.get("message") });
+  BUILDERS.person = (fd) => ({ name: fd.get("name"), phone: fd.get("phone"), email: fd.get("email"), situation: `${fd.get("who")} · ${fd.get("want")}`, session: null, message: fd.get("message") });
+  const choice = document.querySelector(".contact-choice");
+  if (choice) {
+    const panels = { org: document.querySelector("#panel-org"), person: document.querySelector("#panel-person") };
+    const hint = document.querySelector("#contact-hint");
+    function pick(type, scroll) {
+      choice.querySelectorAll("button").forEach((b) => { const on = b.dataset.type === type; b.classList.toggle("active", on); b.setAttribute("aria-selected", String(on)); });
+      Object.entries(panels).forEach(([k, p]) => { if (p) p.hidden = k !== type; });
+      if (hint) hint.hidden = true;
+      if (scroll && panels[type]) panels[type].scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    choice.addEventListener("click", (e) => { const b = e.target.closest("button[data-type]"); if (b) pick(b.dataset.type, true); });
+    const params = new URLSearchParams(location.search);
+    const t = params.get("type");
+    if (t === "org" || t === "person") {
+      pick(t, false);
+      const kind = params.get("kind");
+      const sel = t === "org" ? document.querySelector("#o-kind") : document.querySelector("#p-want");
+      if (kind && sel) [...sel.options].forEach((o) => { if (o.value.includes(kind) || o.textContent.includes(kind)) sel.value = o.value; });
+    }
+    const orgForm = document.querySelector("#contact-org-form");
+    const personForm = document.querySelector("#contact-person-form");
+    if (orgForm) orgForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const kind = new FormData(orgForm).get("kind") || "";
+      handleInquiry(orgForm, /특강|세미나|자문/.test(kind) ? "lecture" : "inquiry", "org");
+    });
+    if (personForm) personForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const fd = new FormData(personForm);
+      if (!String(fd.get("phone") || "").trim() && !String(fd.get("email") || "").trim()) { const n = personForm.querySelector(".form-note"); if (n) { n.textContent = "연락처나 이메일 중 하나는 적어주세요."; n.style.color = "var(--red)"; } return; }
+      handleInquiry(personForm, fd.get("want") === "1:1 코칭" ? "coaching" : "inquiry", "person");
+    });
+  }
 })();
